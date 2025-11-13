@@ -1,0 +1,9 @@
+I was a backend developper at apside from 2017 to 2022, i worked on the telephony service, developed, IVR, restructed application, followed an intern
+At tactill from 2022 to 2024, i fully managed and implemented new features for the applicaiton to worked
+as a product owner at alten since 2024, i refine, follow KPIs, and deliver on time user requested features.
+
+education : 
+2010-2013 => Lycée marcelin berthelot, St maur des fossées => Prépa MP
+2013-2017 => ENSEEIHT, Toulouse => Sofwtare engineering, BDE
+2019 => Scrum product owner
+2020 => SAFe scrum master

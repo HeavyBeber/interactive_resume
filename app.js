@@ -1,6 +1,7 @@
 const state = {
   name: 'Alexandre Bernard',
   photo: 'assets/moi.png',
+  score: 0,
 }
 
 const data = {
@@ -74,6 +75,13 @@ const data = {
     linkedin: 'https://www.linkedin.com/in/alexandre-bernard-89561ab7',
     phone: '(+33)6 75 59 51 20'
   }
+  ,
+  /* shop items available for purchase with score */
+  shop: [
+    { id: 'coffee', name: 'Coffee', cost: 2, desc: 'A small boost for productivity.' },
+    { id: 'sticker', name: 'Sticker Pack', cost: 5, desc: 'Show off some cute stickers.' },
+    { id: 'badge', name: 'Gold Badge', cost: 10, desc: 'A shiny badge for your profile.' }
+  ]
 }
 
 // elements
@@ -83,6 +91,12 @@ const content = document.getElementById('content')
 const startBtn = document.getElementById('startBtn')
 const nameEl = document.getElementById('name')
 const photoEl = document.getElementById('photo')
+const scoreEl = document.getElementById('scoreCounter')
+const shopButton = document.getElementById('shopButton')
+const shopModal = document.getElementById('shopModal')
+const shopBody = document.getElementById('shopBody')
+const shopClose = document.getElementById('shopClose')
+const shopBalance = document.getElementById('shopBalance')
 const answers = document.getElementById('answers')
 const contentInner = document.getElementById('contentInner')
 const backBtn = document.getElementById('backBtn')
@@ -92,6 +106,9 @@ const skillsToggle = document.getElementById('skillsToggle')
 
 nameEl.textContent = state.name
 photoEl.src = state.photo
+if(scoreEl) scoreEl.textContent = `Score: ${state.score}`
+
+if(shopBalance) shopBalance.textContent = String(state.score)
 
 // render persistent skills panel
 if(skillsPanelInner){
@@ -104,12 +121,95 @@ if(skillsToggle && skillsPanel){
   })
 }
 
-startBtn.addEventListener('click', () => {
+if (startBtn) startBtn.addEventListener('click', () => {
   // animate out hero then show question
   const hero = document.getElementById('hero')
   hero.classList.add('hidden')
   showQuestion()
 })
+
+// update score display helper
+function updateScore(){
+  if(scoreEl) scoreEl.textContent = `Score: ${state.score}`
+  if(shopBalance) shopBalance.textContent = String(state.score)
+}
+
+// Increment score on left-mouse clicks anywhere on the document
+document.addEventListener('click', (e)=>{
+  // only count left mouse button (button === 0)
+  try{
+    if(typeof e.button === 'number' && e.button === 0){
+      state.score += 1
+      updateScore()
+    }
+  }catch(err){/* defensive: ignore unexpected event shapes */}
+})
+
+// --- Shop logic ---
+function openShop(){
+  if(!shopModal) return
+  shopModal.setAttribute('aria-hidden','false')
+  renderShop()
+  // move focus to modal close for keyboard users
+  setTimeout(()=>{ if(shopClose) shopClose.focus() },60)
+}
+
+function closeShop(){
+  if(!shopModal) return
+  shopModal.setAttribute('aria-hidden','true')
+}
+
+function renderShop(){
+  if(!shopBody) return
+  shopBody.innerHTML = ''
+  const items = data.shop || []
+  items.forEach(it=>{
+    const card = document.createElement('div')
+    card.className = 'shop-item'
+    const footerId = `buy-${it.id}`
+    card.innerHTML = `<div><div class="item-name">${it.name}</div><div class="item-desc">${it.desc}</div></div><div class="item-footer"><div class="purchase-msg" id="msg-${it.id}"></div><div><strong>
+      ${it.cost} pts
+    </strong> <button id="${footerId}" class="buy-btn">Buy</button></div></div>`
+    shopBody.appendChild(card)
+    const btn = document.getElementById(footerId)
+    const msg = document.getElementById(`msg-${it.id}`)
+    if(btn){
+      btn.addEventListener('click', ()=>{
+        const success = buyItem(it.id)
+        if(success){
+          if(msg){ msg.textContent = 'Purchased ✓'; msg.style.color = 'var(--accent-2)'}
+          btn.disabled = true
+        } else {
+          if(msg){ msg.textContent = 'Not enough points'; msg.style.color = 'var(--muted)'}
+        }
+        setTimeout(()=>{ if(msg) msg.textContent = '' },1600)
+      })
+    }
+  })
+}
+
+function buyItem(id){
+  const item = (data.shop || []).find(s=>s.id===id)
+  if(!item) return false
+  if(state.score >= item.cost){
+    state.score -= item.cost
+    updateScore()
+    return true
+  }
+  return false
+}
+
+// wire up shop button and close actions
+if(shopButton) shopButton.addEventListener('click', openShop)
+if(shopClose) shopClose.addEventListener('click', closeShop)
+if(shopModal){
+  shopModal.addEventListener('click', (e)=>{
+    // close when clicking the overlay (data-close attribute)
+    if(e.target && e.target.getAttribute && e.target.getAttribute('data-close') === 'overlay') closeShop()
+  })
+  // close on ESC
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeShop() })
+}
 
 
 
@@ -250,5 +350,9 @@ function renderContact(container, obj){
 window.resumeEditor = {
   setName(n){ state.name = n; nameEl.textContent = n },
   setPhoto(url){ state.photo = url; photoEl.src = url },
-  setSection(id, text){ if(data[id]!==undefined) data[id]=text }
+  setSection(id, text){ if(data[id]!==undefined) data[id]=text },
+  /* score/shop controls */
+  resetScore(){ state.score = 0; updateScore() },
+  addScore(n){ state.score += Number(n||0); updateScore() },
+  buyItem(id){ return buyItem(id) }
 }

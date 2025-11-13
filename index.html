@@ -11,10 +11,15 @@
   </head>
   <body>
     <main id="app">
+      <!-- Score counter (top-left) -->
+      <div id="scoreCounter" class="score-counter" role="status" aria-live="polite" aria-atomic="true">
+        <div class="balance-main">Balance: <span id="balanceAmount">0 $</span></div>
+        <div id="balanceRate" class="balance-rate">0 $/s</div>
+      </div>
       <!-- global back button removed (no return button requested) -->
       <!-- Persistent skills panel (visible on all screens) -->
       <aside id="skillsPanel" class="skills-panel" aria-label="Skills">
-        <button id="skillsToggle" class="skills-toggle" aria-expanded="true" aria-controls="skillsPanelInner">Skills</button>
+        <div class="skills-toggle">Skills</div>
         <div id="skillsPanelInner" class="skills-panel-inner" role="region">
           <!-- skills will be rendered here by app.js -->
         </div>
@@ -54,6 +59,29 @@
       </section>
     </main>
 
-    <script src="app.js"></script>
+    <!-- Shop button (bottom-right) -->
+    <button id="shopButton" class="shop-button" aria-label="Shop" title="Shop">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M7 4h-2l-1 2H2v2h1l3.6 7.59-1.35 2.45A1 1 0 0 0 6 19h12v-2H7.42a.25.25 0 0 1-.23-.15L7.1 16h7.45a1 1 0 0 0 .96-.74l1.3-5.2A1 1 0 0 0 16.8 8H6.21l-.94-2H7V4zm3 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+      </svg>
+    </button>
+
+    <!-- Shop modal -->
+    <div id="shopModal" class="shop-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="shopTitle">
+      <div class="shop-overlay" data-close="overlay"></div>
+      <div class="shop-dialog" role="document">
+        <header class="shop-header">
+          <h2 id="shopTitle">Shop</h2>
+          <button id="shopClose" class="shop-close" aria-label="Close">×</button>
+        </header>
+        <div class="shop-body" id="shopBody">
+          <!-- Items will be rendered here -->
+        </div>
+        <footer class="shop-footer">
+          <div class="shop-balance">Balance: <span id="shopBalance">0</span></div>
+        </footer>
+      </div>
+    </div>
+    <script type="module" src="main.js"></script>
   </body>
 </html>

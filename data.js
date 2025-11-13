@@ -1,7 +1,7 @@
 export const state = {
   name: 'Alexandre Bernard',
   photo: 'assets/moi.png',
-  score: 0,
+  balance: 0,
 }
 
 export const data = {
@@ -75,5 +75,11 @@ export const data = {
   shop: [
     { id: 'click_booster', name: 'Click Booster', cost: 10, desc: 'Permanently increases $ per click', repeatable: true },
     { id: 'auto_clicker', name: 'Auto Clicker', cost: 100, desc: 'Performs 1 click every second.', repeatable: true }
+  ],
+  achievements: [
+    { id: 'first_earned', title: 'First $ earned', desc: 'Wanna get rich ?', condition: 'Earn any $', unlocks: ['balance'], unlocked: false },
+    { id: 'idle_or_resume', title: 'Is this a resume or an idle game ?!', desc: 'Unlock the shop', condition: 'Reach 10 $', unlocks: ['shop'], unlocked: false },
+    { id: 'buy_5_boosters', title: "Hmmmm, I've got you attention now !", desc: 'Unlock achievements', condition: 'Buy 5 Click Boosters', unlocks: ['achievements'], unlocked: false },
+    { id: 'rate_50', title: 'You are so skilled !', desc: 'Here, find my skills !', condition: 'Reach 50 $/s', unlocks: ['skills'], unlocked: false }
   ]
 }

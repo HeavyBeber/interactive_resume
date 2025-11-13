@@ -1,7 +1,7 @@
 const state = {
   name: 'Alexandre Bernard',
   photo: 'assets/moi.png',
-  score: 0,
+  balance: 0,
 }
 
 const data = {
@@ -91,7 +91,7 @@ const content = document.getElementById('content')
 const startBtn = document.getElementById('startBtn')
 const nameEl = document.getElementById('name')
 const photoEl = document.getElementById('photo')
-const scoreEl = document.getElementById('scoreCounter')
+const scoreEl = document.getElementById('balanceCounter')
 const shopButton = document.getElementById('shopButton')
 const shopModal = document.getElementById('shopModal')
 const shopBody = document.getElementById('shopBody')
@@ -106,9 +106,9 @@ const skillsToggle = document.getElementById('skillsToggle')
 
 nameEl.textContent = state.name
 photoEl.src = state.photo
-if(scoreEl) scoreEl.textContent = `Score: ${state.score}`
+if(scoreEl) scoreEl.textContent = `Balance: ${state.balance} $`
 
-if(shopBalance) shopBalance.textContent = String(state.score)
+if(shopBalance) shopBalance.textContent = String(state.balance)
 
 // render persistent skills panel
 if(skillsPanelInner){
@@ -130,8 +130,8 @@ if (startBtn) startBtn.addEventListener('click', () => {
 
 // update score display helper
 function updateScore(){
-  if(scoreEl) scoreEl.textContent = `Score: ${state.score}`
-  if(shopBalance) shopBalance.textContent = String(state.score)
+  if(scoreEl) scoreEl.textContent = `Balance: ${state.balance} $`
+  if(shopBalance) shopBalance.textContent = String(state.balance)
 }
 
 // Increment score on left-mouse clicks anywhere on the document
@@ -139,7 +139,7 @@ document.addEventListener('click', (e)=>{
   // only count left mouse button (button === 0)
   try{
     if(typeof e.button === 'number' && e.button === 0){
-      state.score += 1
+      state.balance += 1
       updateScore()
     }
   }catch(err){/* defensive: ignore unexpected event shapes */}
@@ -191,8 +191,8 @@ function renderShop(){
 function buyItem(id){
   const item = (data.shop || []).find(s=>s.id===id)
   if(!item) return false
-  if(state.score >= item.cost){
-    state.score -= item.cost
+  if(state.balance >= item.cost){
+    state.balance -= item.cost
     updateScore()
     return true
   }
@@ -351,8 +351,8 @@ window.resumeEditor = {
   setName(n){ state.name = n; nameEl.textContent = n },
   setPhoto(url){ state.photo = url; photoEl.src = url },
   setSection(id, text){ if(data[id]!==undefined) data[id]=text },
-  /* score/shop controls */
-  resetScore(){ state.score = 0; updateScore() },
-  addScore(n){ state.score += Number(n||0); updateScore() },
+  /* balance/shop controls */
+  resetBalance(){ state.balance = 0; updateScore() },
+  addBalance(n){ state.balance += Number(n||0); updateScore() },
   buyItem(id){ return buyItem(id) }
 }

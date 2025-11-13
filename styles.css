@@ -200,11 +200,65 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 .skills-panel.hide{transform:translateY(-50%) translateX(12px);opacity:0.02;pointer-events:none}
 
 /* Score counter (top-left) */
-.score-counter{position:fixed;left:14px;top:14px;z-index:110;padding:0.5rem 0.75rem;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#ffffff;font-weight:700;border:1px solid rgba(255,255,255,0.06);box-shadow:0 14px 40px rgba(139,92,246,0.12);backdrop-filter: blur(6px);cursor:default}
-.score-counter:focus{outline:3px solid rgba(139,92,246,0.14);outline-offset:4px}
+.balance-counter{position:fixed;left:14px;top:14px;z-index:110;padding:0.2rem;border-radius:10px;background:transparent;color:#ffffff;font-weight:700;border:none;box-shadow:none;backdrop-filter:none;cursor:default;display:flex;flex-direction:column;gap:0.2rem;align-items:flex-start}
+.balance-counter:focus{outline:3px solid rgba(139,92,246,0.14);outline-offset:4px}
 
-.balance-main{font-weight:800}
-.balance-rate{font-size:0.8rem;color:var(--muted);margin-top:0.2rem;text-align:right;display:block;width:100%}
+.balance-main{font-weight:800;border:1px solid rgba(255,255,255,0.06);padding:0.18rem 0.45rem;border-radius:8px;background:transparent;display:inline-block}
+.balance-rate{font-size:0.8rem;color:var(--muted);margin-top:0.2rem;text-align:right;display:block;width:100%;border:1px solid rgba(255,255,255,0.04);padding:0.12rem 0.4rem;border-radius:6px;background:transparent}
+
+/* Achievements panel + toast: centered, larger, persistent */
+.achievements-panel{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  z-index:130;
+  display:flex;
+  flex-direction:column-reverse;
+  gap:0.75rem;
+  align-items:center;
+  pointer-events:auto;
+}
+
+.achievement-toast{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#021224;
+  padding:1rem 1.2rem;
+  border-radius:12px;
+  font-weight:700;
+  box-shadow:0 18px 48px rgba(2,6,23,0.7);
+  transform:translateX(0);
+  opacity:1;
+  min-width:280px;
+  max-width:min(720px,92vw);
+}
+
+@keyframes achIn{from{opacity:0;transform:translateX(-8px) translateY(6px)}to{opacity:1;transform:translateX(0) translateY(0)}}
+
+.achievement-toast .toast-header{display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem}
+.achievement-toast .toast-title{font-size:1.15rem;font-weight:800;line-height:1.2;color:#021224}
+.achievement-toast .toast-desc{font-size:0.95rem;font-style:italic;color:#051425;margin-top:0.4rem}
+.achievement-close{background:transparent;border:none;font-size:1.25rem;line-height:1;color:#021224;cursor:pointer;padding:0 0.25rem}
+.achievement-close:focus{outline:3px solid rgba(139,92,246,0.14);border-radius:6px}
+
+/* reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce){
+  .achievement-toast{transition:none;animation:none}
+}
+
+/* Achievements modal list styling */
+.achievement-item{display:flex;gap:0.75rem;align-items:flex-start;padding:0.6rem;border-bottom:1px solid rgba(255,255,255,0.02)}
+.achievement-status{width:28px;flex:0 0 28px;font-size:1.1rem;text-align:center}
+.achievement-title{font-weight:800;font-size:1rem;color:#e9f0ff}
+.achievement-desc{font-style:italic;color:var(--muted);margin-top:4px}
+
+/* Prevent selecting text inside toasts */
+.achievement-toast, .achievement-toast * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
 /* Shop button */
 .shop-button{position:fixed;right:18px;bottom:18px;z-index:120;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;border:none;box-shadow:0 18px 48px rgba(2,6,23,0.55);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
@@ -212,11 +266,23 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 .shop-button:hover{transform:translateY(-4px);box-shadow:0 26px 68px rgba(139,92,246,0.16)}
 .shop-button:focus{outline:3px solid rgba(139,92,246,0.18);outline-offset:6px}
 
+/* Keep shop hidden when `.hidden` is present (more specific selector to override .shop-button display) */
+.shop-button.hidden{display:none}
+
+/* Achievements button (left of shop) */
+.achievements-button{position:fixed;right:86px;bottom:18px;z-index:120;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:999px;background:linear-gradient(90deg,#6a3bd1,#8b5cf6);color:white;border:none;box-shadow:0 18px 48px rgba(2,6,23,0.55);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.achievements-button svg{width:22px;height:22px;display:block;fill:currentColor}
+.achievements-button:hover{transform:translateY(-4px);box-shadow:0 26px 68px rgba(107,62,201,0.16)}
+.achievements-button:focus{outline:3px solid rgba(139,92,246,0.18);outline-offset:6px}
+
+/* Keep achievements button hidden when `.hidden` is present */
+.achievements-button.hidden{display:none}
+
 /* Shop modal styles */
 .shop-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:200}
 .shop-modal[aria-hidden="false"]{display:flex}
-.shop-overlay{position:fixed;inset:0;background:rgba(2,6,23,0.6);backdrop-filter:blur(4px);}
-.shop-dialog{position:relative;z-index:210;width:min(720px,92vw);max-height:78vh;overflow:auto;border-radius:12px;padding:0;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));box-shadow:0 20px 80px rgba(2,6,23,0.7);border:1px solid rgba(255,255,255,0.03)}
+.shop-overlay{position:fixed;inset:0;background:rgba(2,6,23,0.8);backdrop-filter:none}
+.shop-dialog{position:relative;z-index:210;width:min(720px,92vw);max-height:78vh;overflow:auto;border-radius:12px;padding:0;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));box-shadow:0 28px 120px rgba(2,6,23,0.95);border:1px solid rgba(255,255,255,0.06);color:#eaf3ff}
 .shop-header{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1rem;border-bottom:1px solid rgba(255,255,255,0.02)}
 .shop-header h2{margin:0;font-size:1.05rem}
 .shop-close{background:transparent;border:none;font-size:1.4rem;color:var(--muted);cursor:pointer;padding:0.2rem 0.5rem}
@@ -252,5 +318,14 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
   .skills-panel-inner{max-height:28vh}
   .skills-panel.hide{transform:translateX(12px);}
 }
+
+/* Ensure hidden class takes precedence for balance counter */
+.balance-counter.hidden{display:none !important}
+
+
+/* Overrides: increase opacity/readability for shop and achievement cards */
+.shop-item{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)) !important;border:1px solid rgba(255,255,255,0.04) !important}
+.achievement-item{background:linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02)) !important;border:1px solid rgba(255,255,255,0.03) !important;border-radius:8px;margin-bottom:0.45rem}
+
 
 

@@ -1,5 +1,5 @@
 // Shop module: initialize shop UI and wire purchase logic
-export function initShop(elements = {}, state, data, updateScore, recordEvent){
+export function initShop(elements = {}, state, data, updateScore, recordEvent, onUnlock){
   const { shopButton, shopModal, shopBody, shopClose, shopBalance } = elements
   let autoInterval = null
 
@@ -30,7 +30,7 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent){
       // disable if not repeatable and already purchased? We will manage button state after purchase
       if(btn){
         // initial disabled state if not enough funds or item already purchased (non-repeatable)
-        const cannotAfford = typeof state.score === 'number' ? state.score < it.cost : false
+        const cannotAfford = typeof state.balance === 'number' ? state.balance < it.cost : false
         const alreadyBought = Boolean(it.purchased && !it.repeatable)
         btn.disabled = cannotAfford || alreadyBought
         btn.setAttribute('aria-disabled', String(btn.disabled))
@@ -54,7 +54,7 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent){
                 it.cost = Math.ceil(it.cost * 1.5)
               }
               // update balance shown
-              if(shopBalance) shopBalance.textContent = String(state.score)
+              if(shopBalance) shopBalance.textContent = String(state.balance)
               // re-render to update costs and button states
               renderShop()
             } else {
@@ -82,12 +82,24 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent){
   function buyItem(id){
     const item = (data.shop || []).find(s=>s.id===id)
     if(!item) return false
-    if(state.score >= item.cost){
-      state.score -= item.cost
+    if(state.balance >= item.cost){
+      state.balance -= item.cost
       // apply special effects for certain items
       if(item.id === 'click_booster'){
         if(typeof state.clickPower !== 'number') state.clickPower = 1
         state.clickPower = Number(state.clickPower) + 1
+        // track count of click boosters purchased (stored on the shop item)
+        item._count = (item._count || 0) + 1
+        // if player bought 5 boosters, notify via callback or mutate achievement
+        if(item._count >= 5){
+          try{
+            if(typeof onUnlock === 'function') onUnlock('buy_5_boosters')
+            else {
+              const ach = (data.achievements || []).find(a=>a.id==='buy_5_boosters')
+              if(ach) ach.unlocked = true
+            }
+          }catch(e){}
+        }
       }
       if(item.id === 'auto_clicker'){
         state.autoClickers = (state.autoClickers || 0) + 1
@@ -99,7 +111,7 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent){
               const power = Number(state.clickPower || 1)
               if(n > 0){
                 const gained = (power * n)
-                state.score += gained
+                state.balance += gained
                 if(typeof updateScore === 'function') updateScore()
                 if(typeof recordEvent === 'function') recordEvent(gained)
               }
@@ -108,7 +120,7 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent){
         }
       }
       if(typeof updateScore === 'function') updateScore()
-      if(shopBalance) shopBalance.textContent = String(state.score)
+      if(shopBalance) shopBalance.textContent = String(state.balance)
       return true
     }
     return false
@@ -123,7 +135,7 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent){
     document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeShop() })
   }
 
-  if(shopBalance) shopBalance.textContent = String(state.score)
+  if(shopBalance) shopBalance.textContent = String(state.balance)
 
   return { openShop, closeShop, buyItem, refresh }
 }

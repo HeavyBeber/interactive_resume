@@ -174,6 +174,13 @@ pre{white-space:pre-wrap;font-family:inherit;color:#dbe8ff}
   text-decoration:underline;
 }
 
+/* Phone number in contact rows: warm yellow for emphasis */
+.contact-phone{ color: #ffd9b3; font-weight:700 }
+/* Masked phone digits styling and interaction */
+.contact-phone .masked-digit{ color: #ffd9b3; background: transparent; cursor: pointer; padding: 0 2px; border-radius: 2px }
+.contact-phone .masked-digit:hover{ text-decoration: underline }
+.contact-phone .contact-digit{ color: #ffd9b3; font-weight:700 }
+
 /* Lottie layout */
 .hero-lottie{margin-top:0.6rem}
 
@@ -336,6 +343,19 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 .achievements-button svg{width:22px;height:22px;display:block;fill:currentColor}
 .achievements-button:hover{transform:translateY(-4px);box-shadow:0 26px 68px rgba(107,62,201,0.16)}
 .achievements-button:focus{outline:3px solid rgba(139,92,246,0.18);outline-offset:6px}
+
+/* Make the trophy image non-selectable and non-draggable to avoid selection on rapid clicks */
+.achievements-button img{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: none; /* allow clicks to pass through to the button */
+}
 
 /* Keep achievements button hidden when `.hidden` is present */
 

@@ -221,6 +221,9 @@ const achievementsApi = initAchievements({
   shopButton: elements.shopButton
 }, state, data, updateScore, recordEvent)
 
+// expose achievements API globally so small UI helpers can unlock achievements
+try{ window.achievementsApi = achievementsApi }catch(e){}
+
 const shopApi = initShop({
   shopButton: elements.shopButton,
   shopModal: elements.shopModal,

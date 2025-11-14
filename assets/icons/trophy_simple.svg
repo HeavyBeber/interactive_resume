@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="24" height="24" aria-hidden="true">
+  <!-- Simple two-handled trophy -->
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- cup (made bigger: wider and taller) -->
+    <path d="M12 14c0 11 8 18 20 18s20-7 20-18" fill="#ffffff" stroke="#ffffff" stroke-width="1" opacity="0.95"/>
+    <!-- rim -->
+    <path d="M10 12h44" stroke="#ffffff"/>
+    <!-- left handle -->
+    <path d="M8 15c-3 5 0 12 8 14"/>
+    <path d="M6 19c-1.5 2.5-1 6 2 9" stroke="#ffffff" stroke-width="1" opacity="0.8"/>
+    <!-- right handle -->
+    <path d="M56 15c3 5 0 12-8 14"/>
+    <path d="M58 19c1.5 2.5 1 6-2 9" stroke="#ffffff" stroke-width="1" opacity="0.8"/>
+    <!-- stem/base (taller stem for a higher foot) -->
+    <path d="M22 32v12h20v-12" fill="#ffffff" stroke="#ffffff" stroke-width="1"/>
+    <!-- higher & taller foot plate -->
+    <rect x="16" y="44" width="32" height="8" rx="1" fill="#ffffff"/>
+  </g>
+</svg>

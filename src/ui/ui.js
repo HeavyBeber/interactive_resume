@@ -65,7 +65,51 @@ export function renderContact(container, obj){
     if(obj.phone){
       const row = document.createElement('div')
       row.className = 'edu-row'
-      row.innerHTML = `<div><strong>Phone</strong></div><div class="year"><a href="tel:${obj.phone}">${obj.phone}</a></div>`
+      // render phone with digits masked (except the prefix +336). Clicking a * reveals the digit.
+      const phoneRaw = String(obj.phone || '')
+      // find positions of the sequence '+336' in the original string (match '+' then '3','3','6' in order)
+      const keepSeq = ['+', '3', '3', '6']
+      const keepPos = new Set()
+      let k = 0
+      for(let i=0;i<phoneRaw.length && k<keepSeq.length;i++){
+        if(phoneRaw[i] === keepSeq[k]){ keepPos.add(i); k++ }
+      }
+      // build HTML: non-digits stay as-is; digits not in keepPos become clickable masked spans
+      let html = ''
+      for(let i=0;i<phoneRaw.length;i++){
+        const ch = phoneRaw[i]
+        if(/\d/.test(ch)){
+          if(keepPos.has(i)){
+            html += `<span class="contact-digit">${ch}</span>`
+          } else {
+            html += `<span class="masked-digit" data-digit="${ch}" role="button" aria-label="Reveal digit">*</span>`
+          }
+        } else {
+          // keep characters like +, whitespace, parentheses
+          html += `<span class="contact-char">${ch}</span>`
+        }
+      }
+      row.innerHTML = `<div><strong>Phone</strong></div><div class="year contact-phone">${html}</div>`
+      // add click handler via delegation to reveal masked digits
+      row.addEventListener('click', (ev)=>{
+        try{
+          const t = ev.target
+          if(t && t.classList && t.classList.contains('masked-digit')){
+            const d = t.dataset && t.dataset.digit
+            if(d){
+              t.textContent = d; t.classList.remove('masked-digit'); t.classList.add('contact-digit'); t.removeAttribute('data-digit');
+            }
+            // if no masked digits remain, unlock the phone reveal achievement
+            try{
+              const anyLeft = row.querySelector('.masked-digit')
+              if(!anyLeft && !row.dataset.revealed){
+                row.dataset.revealed = 'true'
+                try{ if(window && window.achievementsApi && typeof window.achievementsApi.unlockAchievement === 'function') window.achievementsApi.unlockAchievement('reveal_phone') }catch(e){}
+              }
+            }catch(e){}
+          }
+        }catch(e){}
+      })
       rows.push(row)
     }
     if(obj.linkedin){

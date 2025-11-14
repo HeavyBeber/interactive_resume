@@ -53,11 +53,11 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent, o
             if(it.repeatable){
               // allow different growth rules per item
               if(it.id === 'auto_clicker'){
-                // increases by 30% on each buy
-                it.cost = Math.ceil(it.cost * 1.3)
+                // increases by 20% on each buy
+                it.cost = Math.ceil(it.cost * 1.2)
               } else if(it.id === 'click_booster'){
-                // increases by 50%
-                it.cost = Math.ceil(it.cost * 1.5)
+                // increases by 30%
+                it.cost = Math.ceil(it.cost * 1.3)
               } else {
                 it.cost = Math.ceil(it.cost * 1.5)
               }

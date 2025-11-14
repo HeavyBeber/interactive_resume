@@ -2,7 +2,7 @@ export const state = {
   name: 'Alexandre Bernard',
   photo: 'assets/moi.png',
   balance: 0,
-  clickPower: 100
+  clickPower: 1
 }
 
 export const data = {
@@ -18,10 +18,11 @@ export const data = {
       logo: 'assets/logo_alten.png',
       range: '2024 — Present',
       bullets: [
-        'Defined and prioritized the roadmap and translated user requests into deliverable work',
-        'Tracked KPIs and iterated on features using metrics-driven improvements',
-        'Coordinated cross-functional teams to deliver user-requested features on time',
-        'Managed backlog, ran demos, and collected stakeholder feedback to refine scope'
+        'Defined and prioritized the product roadmap, translating complex user requests into clear, deliverable features aligned with business goals.',
+        'Tracked KPIs, performed metrics-driven iterations, and optimized features to maximize user engagement and retention.',
+        'Coordinated cross-functional teams across design, engineering, and QA to deliver user-requested features ahead of schedule.',
+        'Managed backlog, ran demos, collected stakeholder feedback, and refined scope to balance strategic initiatives with urgent needs.',
+        'Facilitated stakeholder workshops to uncover hidden pain points and align roadmap with business priorities.'
       ]
     },
     {
@@ -30,10 +31,11 @@ export const data = {
       logo: 'assets/logo_tactill.jpg',
       range: '2022 — 2024',
       bullets: [
-        'Solely owned and implemented new features end-to-end for the product',
-        'Integrated external APIs and improved reliability and error handling across the app',
-        'Added automated tests and streamlined CI to speed up safe releases',
-        'Collaborated closely with UX and stakeholders to refine requirements and ship on schedule'
+        'Owned end-to-end implementation of new features, ensuring high-quality, maintainable code and timely delivery.',
+        'Integrated external APIs, improving system reliability and proactively handling error scenarios to minimize downtime.',
+        'Added automated testing, streamlined CI/CD pipelines, and reduced deployment time while increasing confidence in production releases.',
+        'Collaborated closely with UX and stakeholders to translate ambiguous requirements into practical, scalable solutions.',
+        'Conducted code reviews, knowledge-sharing sessions, and technical mentorship to elevate team capabilities.'
       ]
     },
     {
@@ -42,10 +44,11 @@ export const data = {
       logo: 'assets/logo_apside.jpeg',
       range: '2017 — 2022',
       bullets: [
-        'Built and maintained the telephony service and IVR flows handling high call volumes',
-        'Refactored and restructured a legacy application into modular components for easier maintenance',
-        'Introduced monitoring and tooling that reduced incident mean-time-to-repair',
-        'Mentored an intern: code reviews, onboarding and hands-on guidance'
+        'Built and maintained high-volume telephony services and IVR flows, ensuring reliable and scalable operations.',
+        'Refactored and modularized a legacy application, significantly improving maintainability and deployment agility.',
+        'Mentored interns and junior developers, providing hands-on guidance, onboarding, and structured code reviews.',
+        'Collaborated with cross-functional teams to design backend solutions that met both technical and business requirements.',
+        'Led initiatives to improve database efficiency, reduce latency, and support rapid feature expansion.'
       ]
     }
   ],
@@ -75,7 +78,7 @@ export const data = {
   },
   shop: [
     { id: 'click_booster', name: 'Click Booster', cost: 10, desc: 'Permanently increases $ per click', repeatable: true },
-    { id: 'auto_clicker', name: 'Auto Clicker', cost: 100, desc: 'Performs 1 click every second.', repeatable: true },
+    { id: 'auto_clicker', name: 'Auto Clicker', cost: 50, desc: 'Performs 1 click every second.', repeatable: true },
     { id: 'video_demo', name: 'Add break', cost: 1000, desc: 'Watch my demo reel', repeatable: false, videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', awardAchievement: 'dont_give_up_on_me' }
   ],
   achievements: [
@@ -87,5 +90,6 @@ export const data = {
     { id: 'dont_give_up_on_me', title: "Don't give up on me", desc: 'Get rick rolled', condition: '???', unlocks: [], unlocked: false }
     ,{ id: 'click_face_10', title: "Yes, That's me", desc: 'Buy accessories', condition: 'Click the photo 10 times', unlocks: [], unlocked: false }
     ,{ id: 'reveal_phone', title: "Here's my number", desc: 'So call me maybe', condition: 'Reveal it !', unlocks: [], unlocked: false }
+    ,{ id: 'konami_code', title: 'Is this Easter ?', desc: 'No ? Get an egg anyway', condition: 'Ask a nintendo fan for help', unlocks: [], unlocked: false }
   ]
 }

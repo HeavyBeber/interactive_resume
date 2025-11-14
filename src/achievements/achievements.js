@@ -226,9 +226,9 @@ export function initAchievements(elements = {}, state, data, updateScore, record
               try{
                 const existing = (data.shop || []).map(s=>s.id)
                 const extras = [
-                  { id: 'unlock_experience', name: 'Experience', cost: 500, desc: 'Enables Experience section', repeatable: false, unlocks: ['experience'] },
-                  { id: 'unlock_education', name: 'Education', cost: 500, desc: 'Enables Education section', repeatable: false, unlocks: ['education'] },
-                  { id: 'unlock_contact', name: 'Contact', cost: 500, desc: 'Enables Contact section', repeatable: false, unlocks: ['contact'] }
+                  { id: 'unlock_experience', name: 'Experience', cost: 300, desc: 'Enables Experience section', repeatable: false, unlocks: ['experience'] },
+                  { id: 'unlock_education', name: 'Education', cost: 300, desc: 'Enables Education section', repeatable: false, unlocks: ['education'] },
+                  { id: 'unlock_contact', name: 'Contact', cost: 300, desc: 'Enables Contact section', repeatable: false, unlocks: ['contact'] }
                 ]
                 extras.forEach(x=>{ if(!existing.includes(x.id)) (data.shop = data.shop || []).push(x) })
                 // if shop API is available globally, refresh the UI
@@ -290,6 +290,40 @@ export function initAchievements(elements = {}, state, data, updateScore, record
       }catch(e){}
     })
   }
+
+  // Konami code listener: unlocks a secret achievement when user types the sequence
+  try{
+    const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
+    let konamiPos = 0
+    window.addEventListener('keydown', (ev)=>{
+      try{
+        // ignore input fields and editable regions so typing doesn't trigger it accidentally
+        const tgt = ev.target || {}
+        const tag = (tgt.tagName || '').toUpperCase()
+        if(tag === 'INPUT' || tag === 'TEXTAREA' || tgt.isContentEditable) return
+        const expected = konamiSeq[konamiPos]
+        const pressed = ev.key
+        let match = false
+        if(expected && expected.startsWith('Arrow')){
+          match = (pressed === expected)
+        } else {
+          match = (String(pressed || '').toLowerCase() === String(expected || '').toLowerCase())
+        }
+        if(match){
+          konamiPos++
+          if(konamiPos >= konamiSeq.length){
+            try{ unlockAchievement('konami_code') }catch(e){}
+            konamiPos = 0
+          }
+        } else {
+          // reset to 0 or to 1 if the key matches the first in sequence
+          const first = konamiSeq[0]
+          if(first && ((first.startsWith && first.startsWith('Arrow') && pressed === first) || String(pressed||'').toLowerCase() === String(first||'').toLowerCase())) konamiPos = 1
+          else konamiPos = 0
+        }
+      }catch(e){}
+    })
+  }catch(e){}
 
   // render initial progress (if modal is present)
   try{ renderProgress() }catch(e){}

@@ -1,4 +1,5 @@
 // UI rendering helpers
+import { data } from '../data/data.js'
 export function renderSkills(container, list){
   const wrap = document.createElement('div')
   wrap.className = 'skills-wrap'
@@ -12,6 +13,8 @@ export function renderExperience(container, list){
   list.forEach(item=>{
     const card = document.createElement('article')
     card.className = 'exp-card'
+    // make each card keyboard-focusable so hover/focus effects work for keyboard users
+    card.setAttribute('tabindex','0')
     const logoHtml = item.logo ? `<img src="${item.logo}" alt="${item.company} logo" class="company-logo">` : ''
     card.innerHTML = `<div class="exp-head">${logoHtml}<div class="exp-meta"><h3>${item.role}</h3><p class="muted">${item.company} · ${item.range}</p></div></div><ul>${item.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`
     wrap.appendChild(card)
@@ -74,12 +77,14 @@ export function renderContact(container, obj){
       for(let i=0;i<phoneRaw.length && k<keepSeq.length;i++){
         if(phoneRaw[i] === keepSeq[k]){ keepPos.add(i); k++ }
       }
-      // build HTML: non-digits stay as-is; digits not in keepPos become clickable masked spans
+      // If the reveal_phone achievement is already unlocked, don't mask digits anymore
+      const revealUnlocked = !!(data && data.achievements && data.achievements.find(a=>a.id==='reveal_phone' && a.unlocked))
+      // build HTML: non-digits stay as-is; digits not in keepPos become clickable masked spans unless already unlocked
       let html = ''
       for(let i=0;i<phoneRaw.length;i++){
         const ch = phoneRaw[i]
         if(/\d/.test(ch)){
-          if(keepPos.has(i)){
+          if(keepPos.has(i) || revealUnlocked){
             html += `<span class="contact-digit">${ch}</span>`
           } else {
             html += `<span class="masked-digit" data-digit="${ch}" role="button" aria-label="Reveal digit">*</span>`
@@ -90,8 +95,10 @@ export function renderContact(container, obj){
         }
       }
       row.innerHTML = `<div><strong>Phone</strong></div><div class="year contact-phone">${html}</div>`
-      // add click handler via delegation to reveal masked digits
-      row.addEventListener('click', (ev)=>{
+      // add click handler via delegation to reveal masked digits (only needed if we actually masked anything)
+      const hasMasked = row.querySelector('.masked-digit')
+      if(hasMasked){
+        row.addEventListener('click', (ev)=>{
         try{
           const t = ev.target
           if(t && t.classList && t.classList.contains('masked-digit')){
@@ -109,7 +116,8 @@ export function renderContact(container, obj){
             }catch(e){}
           }
         }catch(e){}
-      })
+        })
+      }
       rows.push(row)
     }
     if(obj.linkedin){

@@ -22,8 +22,16 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent, o
     items.forEach(it=>{
       const card = document.createElement('div')
       card.className = 'shop-item'
-      // show current cost from item (may change for repeatable items)
-      card.innerHTML = `<div><div class="item-name">${it.name}</div><div class="item-desc">${it.desc}</div></div><div class="item-footer"><div class="purchase-msg" data-item="msg-${it.id}"></div><div><strong>${it.cost} $</strong> <button class="buy-btn" data-item="${it.id}">Buy</button></div></div>`
+      // compute owned quantity (some items track count on the item, others in state)
+      const owned = (it._count || 0) || ((it.id === 'auto_clicker') ? (state.autoClickers || 0) : 0)
+      // show owned qty only for repeatable items; one-time purchases shouldn't show a counter
+      const qtyHtml = (it.repeatable ? ` <span class="item-qty">(${owned})</span>` : '')
+      // for one-time purchases, show a check mark if purchased
+      const checkHtml = (!it.repeatable && it.purchased) ? ` <span class="item-check">✓</span>` : ''
+      // button label: show 'Purchased' for non-repeatable items that are already bought, otherwise show the current cost
+      const btnLabel = (!it.repeatable && it.purchased) ? 'Purchased' : `${it.cost} $`
+      // show button (label now displays price); descriptions removed per request
+      card.innerHTML = `<div><div class="item-name">${it.name}${qtyHtml}${checkHtml}</div></div><div class="item-footer"><div class="purchase-msg" data-item="msg-${it.id}"></div><div><button class="buy-btn" data-item="${it.id}" aria-label="Buy ${it.name} for ${it.cost} dollars">${btnLabel}</button></div></div>`
       shopBody.appendChild(card)
       const btn = card.querySelector('button.buy-btn')
       const msg = card.querySelector('[data-item^="msg-"]')
@@ -62,6 +70,8 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent, o
               it.purchased = true
               btn.disabled = true
               btn.setAttribute('aria-disabled', 'true')
+              // re-render so UI reflects the purchased state and owned quantity
+              renderShop()
             }
           } else {
             if(msg){ msg.textContent = 'Not enough points'; msg.style.color = 'var(--muted)'}
@@ -103,6 +113,17 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent, o
       }
       if(item.id === 'auto_clicker'){
         state.autoClickers = (state.autoClickers || 0) + 1
+        // track count of auto clickers purchased
+        item._count = (item._count || 0) + 1
+        if(item._count >= 5){
+          try{
+            if(typeof onUnlock === 'function') onUnlock('full_auto_mode')
+            else {
+              const ach = (data.achievements || []).find(a=>a.id==='full_auto_mode')
+              if(ach) ach.unlocked = true
+            }
+          }catch(e){}
+        }
         // start interval if not already running
         if(!autoInterval){
           autoInterval = setInterval(()=>{
@@ -119,8 +140,55 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent, o
           }, 1000)
         }
       }
+      // special: open a youtube video when purchasing the demo/showreel
+      if(item.id === 'video_demo'){
+        try{
+          const url = item.videoUrl || 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+          // open in new tab/window — this is invoked from a user click so should not be blocked
+          window.open(url, '_blank', 'noopener')
+        }catch(e){}
+      }
+      // generic unlocks support: items may specify `unlocks` array of section ids
+      try{
+        if(item.unlocks && Array.isArray(item.unlocks)){
+          item.unlocks.forEach(u=>{
+            try{
+              // try to find a hero quick-button that triggers this section
+              const btn = document.querySelector(`[onclick="showContent('${u}')"]`) || document.querySelector(`[data-section="${u}"]`)
+              if(btn){
+                try{ btn.removeAttribute('disabled'); btn.setAttribute('aria-disabled','false') }catch(e){}
+                try{ btn.classList.remove('hidden') }catch(e){}
+              }
+              // also try to show a section or panel by id
+              const el = document.getElementById(u)
+              if(el) el.classList.remove('hidden')
+            }catch(e){}
+          })
+        }
+      }catch(e){}
+      // award an achievement on purchase if the item configures one
+      try{
+        if(item.awardAchievement){
+          try{
+            if(typeof onUnlock === 'function') onUnlock(item.awardAchievement)
+            else {
+              const ach = (data.achievements || []).find(a=>a.id===item.awardAchievement)
+              if(ach) ach.unlocked = true
+            }
+          }catch(e){}
+        }
+      }catch(e){}
+      // if this purchase is an accessory, ask the global helper to show it
+      try{
+        const accessoryIds = ['glasses','hat','beard','earing']
+        if(accessoryIds.includes(item.id)){
+          try{ if(typeof window.showAccessory === 'function') window.showAccessory(item.id) }catch(e){}
+        }
+      }catch(e){}
       if(typeof updateScore === 'function') updateScore()
       if(shopBalance) shopBalance.textContent = String(state.balance)
+      // re-render shop so purchased/non-repeatable state and counts update
+      try{ renderShop() }catch(e){}
       return true
     }
     return false

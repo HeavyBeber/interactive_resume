@@ -37,6 +37,16 @@ body{
 .hero-inner{display:flex;gap:1.25rem;align-items:center}
 .hero-text{display:flex;flex-direction:column;gap:0.35rem}
 #photo{width:160px;height:160px;border-radius:50%;object-fit:cover;border:6px solid rgba(255,255,255,0.04);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+#photo{position:relative;z-index:2}
+
+/* Photo wrapper and accessory overlays */
+.photo-wrap{position:relative;display:inline-block}
+.photo-wrap img#photo{display:block}
+.accessory{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:4}
+.accessory.hat{top:14%;width:180px}
+.accessory.glasses{top:48%;width:140px}
+.accessory.beard{top:74%;width:160px}
+.accessory.earing{left:74%;top:58%;width:28px;transform:translate(-50%,-50%)}
 #name{margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(1.6rem,3.5vw,2.5rem)}
 .tagline{margin:0;color:var(--muted);font-size:0.95rem}
 .hero-actions{margin-top:0.5rem}
@@ -53,7 +63,7 @@ body{
   background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
   box-shadow:0 8px 30px rgba(2,6,23,0.6);
 }
-.hidden{display:none}
+.hidden{display:none !important}
 #answers{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem}
 .answerBtn{
   background: transparent;
@@ -189,7 +199,7 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 .global-back svg{filter:drop-shadow(0 1px 0 rgba(0,0,0,0.2))}
 .global-back:hover{transform:translateY(-4px);box-shadow:0 22px 60px rgba(139,92,246,0.2)}
 .global-back:focus{outline:3px solid rgba(139,92,246,0.18);outline-offset:6px}
-.global-back.hidden{display:none}
+
 
 @media (max-width:520px){.global-back{left:12px;top:12px;padding:0.45rem}}
 
@@ -247,10 +257,63 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 }
 
 /* Achievements modal list styling */
-.achievement-item{display:flex;gap:0.75rem;align-items:flex-start;padding:0.6rem;border-bottom:1px solid rgba(255,255,255,0.02)}
+.achievement-item{
+  display:flex;
+  gap:0.75rem;
+  align-items:flex-start;
+  padding:0.6rem;
+  background:linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.03);
+  border-radius:8px;
+  margin-bottom:0.45rem;
+}
+
+/* Achievements modal: force single-column list (one achievement per line) */
+#achBody{
+  display:flex;
+  flex-direction:column;
+  gap:0.6rem;
+  padding:1rem;
+}
+.achievement-item{width:100%}
 .achievement-status{width:28px;flex:0 0 28px;font-size:1.1rem;text-align:center}
 .achievement-title{font-weight:800;font-size:1rem;color:#e9f0ff}
 .achievement-desc{font-style:italic;color:var(--muted);margin-top:4px}
+
+/* Right-align the description/condition inside each achievement row */
+.achievement-meta{ display:flex; flex-direction:column; flex:1; }
+.achievement-item .achievement-desc{
+  text-align:right;
+  margin-left:0;
+  align-self:flex-end;
+  max-width:66%;
+}
+
+/* Unlock animations */
+@keyframes achUnlockPop {
+  0%{ transform: scale(1); box-shadow: 0 0 0 rgba(255,217,179,0.0); }
+  40%{ transform: scale(1.035); box-shadow: 0 6px 20px rgba(255,217,179,0.18); }
+  70%{ transform: scale(0.995); box-shadow: 0 4px 14px rgba(255,217,179,0.12); }
+ 100%{ transform: scale(1); box-shadow: 0 0 0 rgba(255,217,179,0.0); }
+}
+.achievement-item.ach-unlocked{ animation: achUnlockPop 1.05s cubic-bezier(.2,.9,.2,1); border-color: rgba(255,217,179,0.45); }
+.achievement-item.is-unlocked{ border-color: rgba(255,217,179,0.12); }
+
+/* Toast entrance animation */
+@keyframes toastIn {
+  from{ opacity:0; transform: translateY(12px) scale(0.98); }
+  to{ opacity:1; transform: translateY(0) scale(1); }
+}
+.achievement-toast{ animation: toastIn 360ms cubic-bezier(.2,.9,.2,1); }
+
+/* Achievements progress bar (shown at top of achievements modal) */
+.ach-progress-wrap{padding:0.9rem 1rem 0 1rem;border-bottom:1px solid rgba(255,255,255,0.02)}
+.ach-progress{position:relative;padding:0.9rem 0}
+.ach-progress-bar{flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
+.ach-progress-fill{height:100%;background:linear-gradient(90deg,#1ea6ff,#0f7fe6);border-radius:999px;box-shadow:0 10px 28px rgba(15,127,230,0.16);transition:width .45s ease}
+.ach-progress-overlay{position:absolute;left:14px;right:14px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.ach-progress-left{font-weight:800;color:#ffd9b3;font-size:1.02rem;text-shadow:0 2px 6px rgba(0,0,0,0.55)}
+.ach-progress-right{font-weight:800;color:#ffd9b3;font-size:1.02rem;text-shadow:0 2px 6px rgba(0,0,0,0.55)}
 
 /* Prevent selecting text inside toasts */
 .achievement-toast, .achievement-toast * {
@@ -267,7 +330,6 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 .shop-button:focus{outline:3px solid rgba(139,92,246,0.18);outline-offset:6px}
 
 /* Keep shop hidden when `.hidden` is present (more specific selector to override .shop-button display) */
-.shop-button.hidden{display:none}
 
 /* Achievements button (left of shop) */
 .achievements-button{position:fixed;right:86px;bottom:18px;z-index:120;display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:999px;background:linear-gradient(90deg,#6a3bd1,#8b5cf6);color:white;border:none;box-shadow:0 18px 48px rgba(2,6,23,0.55);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
@@ -276,7 +338,6 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 .achievements-button:focus{outline:3px solid rgba(139,92,246,0.18);outline-offset:6px}
 
 /* Keep achievements button hidden when `.hidden` is present */
-.achievements-button.hidden{display:none}
 
 /* Shop modal styles */
 .shop-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:200}
@@ -287,12 +348,59 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 .shop-header h2{margin:0;font-size:1.05rem}
 .shop-close{background:transparent;border:none;font-size:1.4rem;color:var(--muted);cursor:pointer;padding:0.2rem 0.5rem}
 .shop-body{padding:1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem}
-.shop-item{display:flex;flex-direction:column;gap:0.45rem;padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
+.shop-item{
+  display:flex;
+  flex-direction:column;
+  gap:0.45rem;
+  padding:0.75rem;
+  border-radius:10px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.04);
+}
 .shop-item .item-name{font-weight:700}
-.shop-item .item-desc{color:var(--muted);font-size:0.92rem}
+.shop-item .item-qty{
+  margin-left:8px;
+  font-size:0.95rem;
+  font-weight:400; /* remove bold */
+  color:#ffd9b3; /* slightly warmer/yellow to stand out */
+  background:transparent;
+  padding:0;
+  border-radius:0;
+}
+.shop-item .item-check{
+  margin-left:8px;
+  font-size:0.98rem;
+  color:var(--accent-2);
+  font-weight:600;
+}
 .shop-item .item-footer{display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem}
-.buy-btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021224;border:none;padding:0.5rem 0.7rem;border-radius:8px;cursor:pointer;font-weight:800}
-.buy-btn[disabled]{opacity:0.5;cursor:not-allowed}
+.buy-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#021224;
+  border:1px solid transparent; /* keep same border box as disabled to avoid size shift */
+  padding:0.5rem 0.9rem;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:800;
+  line-height:1;
+  box-shadow:0 10px 28px rgba(139,92,246,0.12);
+  transition:transform .14s ease, box-shadow .14s ease, filter .14s ease, opacity .14s ease;
+  box-sizing:border-box;
+}
+.buy-btn:not([disabled]):hover{ transform:translateY(-3px); box-shadow:0 16px 44px rgba(139,92,246,0.18) }
+.buy-btn[disabled]{
+  background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  color: rgba(255,255,255,0.6);
+  border:1px solid rgba(255,255,255,0.02);
+  box-shadow:none;
+  cursor:not-allowed;
+  opacity:0.7;
+  filter:grayscale(50%);
+  padding:0.5rem 0.9rem; /* ensure same padding */
+}
 .shop-footer{padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.02);display:flex;justify-content:flex-end}
 .shop-balance{font-weight:700;color:var(--accent-2)}
 .purchase-msg{font-size:0.87rem;color:#bdbdbd}
@@ -320,12 +428,18 @@ button:focus, a:focus, .exp-card:focus{outline:3px solid rgba(96,165,250,0.12);o
 }
 
 /* Ensure hidden class takes precedence for balance counter */
-.balance-counter.hidden{display:none !important}
 
 
 /* Overrides: increase opacity/readability for shop and achievement cards */
-.shop-item{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)) !important;border:1px solid rgba(255,255,255,0.04) !important}
-.achievement-item{background:linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02)) !important;border:1px solid rgba(255,255,255,0.03) !important;border-radius:8px;margin-bottom:0.45rem}
+
+
+
+/* Confetti pieces and flight animation (used for achievement unlocks/toasts) */
+.confetti-container{ position:fixed; pointer-events:none; z-index:140; transform:translate(-50%,-50%); left:0; top:0 }
+.confetti-piece{ position:absolute; left:0; top:0; border-radius:2px; opacity:1; will-change: transform, opacity; transform: translate(0,0) rotate(0); }
+@keyframes confettiFlight{ to{ transform: translate(var(--tx), var(--ty)) rotate(var(--rot)); opacity:0 } }
+@media (prefers-reduced-motion: reduce){ .confetti-piece{ animation:none !important } }
+
 
 
 

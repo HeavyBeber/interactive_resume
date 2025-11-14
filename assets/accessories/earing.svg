@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Small hoop earring positioned to the right side by default -->
+  <g fill="none" stroke="#cfa34a" stroke-width="4">
+    <circle cx="150" cy="110" r="10" stroke="#cfa34a" fill="#ffd27a" />
+    <circle cx="150" cy="110" r="4" fill="#fff3d9" stroke="none" />
+  </g>
+</svg>

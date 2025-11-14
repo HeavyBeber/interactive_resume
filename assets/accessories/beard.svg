@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Simple beard that sits under the chin -->
+  <g fill="#432b22" stroke="#2c1b15" stroke-width="2">
+    <path d="M48 110 C60 150, 140 150, 152 110 C148 140, 120 172, 100 172 C80 172, 52 140, 48 110 Z"/>
+  </g>
+</svg>

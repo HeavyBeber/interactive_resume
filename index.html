@@ -11,11 +11,7 @@
   </head>
   <body>
     <main id="app">
-      <!-- Score counter (top-left) -->
-      <div id="balanceCounter" class="balance-counter hidden" role="status" aria-live="polite" aria-atomic="true">
-        <div class="balance-main">Balance: <span id="balanceAmount">0 $</span></div>
-        <div id="balanceRate" class="balance-rate">0 $/s</div>
-      </div>
+      <!-- Score counter (moved into hero for top-right placement) -->
       <!-- global back button removed (no return button requested) -->
       <!-- Persistent skills panel (visible on all screens) -->
       <aside id="skillsPanel" class="skills-panel hidden" aria-label="Skills">
@@ -27,6 +23,11 @@
       <header id="hero" class="hero center">
         <div class="hero-inner">
           <img src="assets/moi.png" alt="Your photo" id="photo" />
+          <!-- Balance moved here so it can be positioned top-right of the hero -->
+          <div id="balanceCounter" class="balance-counter hidden" role="status" aria-live="polite" aria-atomic="true">
+            <div class="balance-main">Balance: <span id="balanceAmount">0 $</span></div>
+            <div id="balanceRate" class="balance-rate">0 $/s</div>
+          </div>
           <div class="hero-text">
             <h1 id="name">Your Name</h1>
             <p class="tagline">My impact goes beyond what any document can express; it is visible in the lasting results I deliver.</p>

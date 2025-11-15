@@ -62,7 +62,7 @@ export const data = {
   skills: {
     'Product': [
       'Roadmapping',
-      'Prioritization',
+    'Prioritization',
       'Discovery',
     ],
     'Data ': [
@@ -79,7 +79,7 @@ export const data = {
       'Postman'
     ],
     'Core Strengths': [
-      'Communication',
+    'Communication',
       'Critical Thinking',
       'Leadership',
       'Collaboration',

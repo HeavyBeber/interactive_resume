@@ -9,7 +9,6 @@
   --card: rgba(255,245,238,0.03);
   --glass: rgba(255,245,238,0.04);
   --hero-space: 220px; /* space reserved for fixed header on desktop */
-  --hero-scale: 1;
 }
 
 /* Prevent text selection during rapid/spam clicking in the main UI */
@@ -105,14 +104,13 @@ pre{white-space:pre-wrap;font-family:inherit;color:#dbe8ff}
     position:fixed;
     top:28px;
     left:50%;
-    transform:translateX(-50%) scale(var(--hero-scale,1));
-    transition: transform .18s ease;
+    transform:translateX(-50%);
     z-index:70;
     width:min(1100px,96vw);
   }
   /* push main content down so it doesn't sit under the fixed header */
   main#app{
-    padding-top: calc(var(--hero-space) * var(--hero-scale));
+    padding-top: calc(var(--hero-space));
     display:block; /* ensure normal flow */
   }
   /* Ensure main content stays under the hero and allow timeline to scroll inside viewport */
@@ -127,11 +125,6 @@ pre{white-space:pre-wrap;font-family:inherit;color:#dbe8ff}
   }
   .timeline::-webkit-scrollbar{ display: none; width: 0; height: 0 }
 
-  /* Gradually reduce the hero scale as the viewport gets narrower (covers zoom-in behavior) */
-  @media (max-width:1200px){ :root{ --hero-scale: 0.9 } }
-  @media (max-width:1000px){ :root{ --hero-scale: 0.8 } }
-  @media (max-width:920px){ :root{ --hero-scale: 0.7 } }
-  @media (max-width:860px){ :root{ --hero-scale: 0.6 } }
 }
 
 /* content specific styles */

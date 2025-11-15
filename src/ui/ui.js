@@ -5,8 +5,8 @@ export function renderSkills(container, list){
   wrap.className = 'skills-wrap'
   // Backwards compatible: if list is an array, render as before
   if(Array.isArray(list)){
-    wrap.innerHTML = list.map(s=>`<span class="skill">${s}</span>`).join('')
-    container.appendChild(wrap)
+  wrap.innerHTML = list.map(s=>`<span class="skill">${s}</span>`).join('')
+  container.appendChild(wrap)
     return
   }
   // If list is an object of sections, render headings + skills

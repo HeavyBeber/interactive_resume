@@ -3,7 +3,43 @@ import { data } from '../data/data.js'
 export function renderSkills(container, list){
   const wrap = document.createElement('div')
   wrap.className = 'skills-wrap'
-  wrap.innerHTML = list.map(s=>`<span class="skill">${s}</span>`).join('')
+  // Backwards compatible: if list is an array, render as before
+  if(Array.isArray(list)){
+    wrap.innerHTML = list.map(s=>`<span class="skill">${s}</span>`).join('')
+    container.appendChild(wrap)
+    return
+  }
+  // If list is an object of sections, render headings + skills
+  if(list && typeof list === 'object'){
+    Object.keys(list).forEach(section => {
+      const items = Array.isArray(list[section]) ? list[section] : []
+      const group = document.createElement('div')
+      // assign an id so the toggle button can reference it (aria-controls)
+      const id = `skills-${section.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9\-]/g,'')}`
+      group.className = 'skills-section collapsed'
+      group.id = id
+      group.innerHTML = items.map(s=>`<span class="skill">${s}</span>`).join('')
+
+      const header = document.createElement('div')
+      header.className = 'skills-section-header'
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'skills-section-toggle'
+      btn.setAttribute('aria-expanded','false')
+      btn.setAttribute('aria-controls', id)
+      btn.textContent = section
+      // toggle collapsed state
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true'
+        btn.setAttribute('aria-expanded', String(!expanded))
+        if(expanded) group.classList.add('collapsed')
+        else group.classList.remove('collapsed')
+      })
+      header.appendChild(btn)
+      wrap.appendChild(header)
+      wrap.appendChild(group)
+    })
+  }
   container.appendChild(wrap)
 }
 

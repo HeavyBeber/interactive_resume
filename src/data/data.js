@@ -18,11 +18,11 @@ export const data = {
       logo: 'assets/logo_alten.png',
       range: '2024 — Present',
       bullets: [
-        'Defined and prioritized the product roadmap, translating complex user requests into clear, deliverable features aligned with business goals.',
-        'Tracked KPIs, performed metrics-driven iterations, and optimized features to maximize user engagement and retention.',
-        'Coordinated cross-functional teams across design, engineering, and QA to deliver user-requested features ahead of schedule.',
-        'Managed backlog, ran demos, collected stakeholder feedback, and refined scope to balance strategic initiatives with urgent needs.',
-        'Facilitated stakeholder workshops to uncover hidden pain points and align roadmap with business priorities.'
+        'Defined and communicated a clear product vision, translating complex user needs into well-scoped, actionable features aligned with strategic goals.',
+        'Prioritized the roadmap and backlog to maximize user value, ensuring smooth execution across multiple teams.',
+        'Drove data-informed improvements by analyzing product usage and turning insights into meaningful iterations.',
+        'Coordinated design, engineering, and QA to accelerate delivery and maintain high-quality standards.',
+        'Facilitated workshops and alignment sessions, uncovering hidden pain points and strengthening stakeholder engagement.'
       ]
     },
     {
@@ -31,11 +31,11 @@ export const data = {
       logo: 'assets/logo_tactill.jpg',
       range: '2022 — 2024',
       bullets: [
-        'Owned end-to-end implementation of new features, ensuring high-quality, maintainable code and timely delivery.',
-        'Integrated external APIs, improving system reliability and proactively handling error scenarios to minimize downtime.',
-        'Added automated testing, streamlined CI/CD pipelines, and reduced deployment time while increasing confidence in production releases.',
-        'Collaborated closely with UX and stakeholders to translate ambiguous requirements into practical, scalable solutions.',
-        'Conducted code reviews, knowledge-sharing sessions, and technical mentorship to elevate team capabilities.'
+        'Led the end-to-end development of new features, ensuring scalable, maintainable, and reliable code.',
+        'Integrated external APIs and enhanced system resilience with robust error-handling and monitoring practices.',
+        'Improved development workflows by enhancing automated testing and optimizing CI/CD pipelines.',
+        'Partnered closely with UX and product teams to transform ambiguous requirements into practical technical solutions.',
+        'Elevated team capabilities through code reviews, documentation, and knowledge-sharing initiatives.'
       ]
     },
     {
@@ -44,11 +44,11 @@ export const data = {
       logo: 'assets/logo_apside.jpeg',
       range: '2017 — 2022',
       bullets: [
-        'Built and maintained high-volume telephony services and IVR flows, ensuring reliable and scalable operations.',
-        'Refactored and modularized a legacy application, significantly improving maintainability and deployment agility.',
-        'Mentored interns and junior developers, providing hands-on guidance, onboarding, and structured code reviews.',
-        'Collaborated with cross-functional teams to design backend solutions that met both technical and business requirements.',
-        'Led initiatives to improve database efficiency, reduce latency, and support rapid feature expansion.'
+        'Designed, developed, and maintained backend services and telephony systems supporting high-volume operations.',
+        'Modernized a legacy application through structured refactoring, improving maintainability and long-term scalability.',
+        'Mentored interns and junior developers, offering hands-on guidance, onboarding support, and structured reviews.',
+        'Collaborated with product and cross-functional teams to design backend architectures aligned with business needs.',
+        'Implemented database and system optimizations that supported faster development and more reliable service delivery.'
       ]
     }
   ],
@@ -59,18 +59,33 @@ export const data = {
     { degree: 'Software Engineering', school: 'ENSEEIHT, Toulouse', year: '2013 — 2017' },
     { degree: 'Prépa MP', school: 'Lycée Marcelin Berthelot, St Maur des Fossées', year: '2010 — 2013' }
   ],
-  skills: [
-    'Product Strategy',
-    'Stakeholder Mgmt',
-    'Prioritization',
-    'KPI Tracking',
-    'Agile Coaching',
-    'User Research',
-    'Data-Driven',
-    'Communication',
-    'Release Planning',
-    'Backlog Mgmt'
-  ],
+  skills: {
+    'Product': [
+      'Roadmapping',
+      'Prioritization',
+      'Discovery',
+    ],
+    'Data ': [
+      'KPI Analysis',
+      'Experimentation',
+      'Insight Extraction'
+    ],
+    'Technical': [
+      'System Design',
+      'CI/CD',
+      'Automated Testing',
+      'SQL',
+      'Git',
+      'Postman'
+    ],
+    'Core Strengths': [
+      'Communication',
+      'Critical Thinking',
+      'Leadership',
+      'Collaboration',
+      'Adaptability'
+    ]
+  },
   contact: {
     email: 'alexandre.bernard94@gmail.com',
     linkedin: 'https://www.linkedin.com/in/alexandre-bernard-89561ab7',

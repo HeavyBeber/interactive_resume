@@ -585,6 +585,21 @@ pre {
   font-weight: 700
 }
 
+/* About section: larger, more readable paragraphs */
+.about-section {
+  margin-top: 0.6rem;
+}
+.about-section h2 {
+  margin: 0 0 0.4rem 0;
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+}
+.about-section .about-body {
+  color: var(--muted);
+  font-size: clamp(1rem, 1.5vw, 1.06rem);
+  line-height: 1.6;
+  margin-top: 0.6rem;
+}
+
 /* Lottie layout */
 .hero-lottie {
   margin-top: 0.6rem

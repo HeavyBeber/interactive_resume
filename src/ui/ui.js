@@ -171,3 +171,29 @@ export function renderContact(container, obj){
   }
   container.appendChild(wrap)
 }
+
+export function renderAbout(container, about){
+  const wrap = document.createElement('div')
+  wrap.className = 'about-section'
+  const title = document.createElement('h2')
+  title.textContent = (about && about.headline) ? about.headline : 'About Me'
+  wrap.appendChild(title)
+
+  const bodyText = (about && about.body) ? String(about.body) : ''
+  if(!bodyText.trim()){
+    const p = document.createElement('p')
+    p.className = 'muted about-body'
+    p.textContent = 'No about information provided.'
+    wrap.appendChild(p)
+  } else {
+    // split on empty-line separators to render paragraphs
+    const paragraphs = bodyText.split(/\n\s*\n/)
+    paragraphs.forEach(par => {
+      const p = document.createElement('p')
+      p.className = 'muted about-body'
+      p.textContent = par.trim()
+      wrap.appendChild(p)
+    })
+  }
+  container.appendChild(wrap)
+}

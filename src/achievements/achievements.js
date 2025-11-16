@@ -192,6 +192,36 @@ export function initAchievements(elements = {}, state, data, updateScore, record
       row.appendChild(bar)
       row.appendChild(overlay)
       pc.appendChild(row)
+      // If player has unlocked at least 80% of achievements, reveal the About section (one-time)
+      try{
+        if(pct >= 80){
+          // only reveal once
+          if(!data._aboutRevealed){
+            data._aboutRevealed = true
+            // add an About option to the main options list if not present
+            try{
+              const exists = (data.options || []).some(o=>o.id==='about')
+              if(!exists) (data.options = data.options || []).push({ id: 'about', label: 'About' })
+            }catch(e){}
+            // add a quick hero button if present
+            try{
+              const hero = document.getElementById('hero')
+              if(hero){
+                const choices = hero.querySelector('.hero-choices')
+                if(choices && !choices.querySelector('[data-id="about-btn"]')){
+                  const btn = document.createElement('button')
+                  btn.className = 'answerBtn'
+                  btn.type = 'button'
+                  btn.dataset.id = 'about-btn'
+                  btn.textContent = 'About Me'
+                  btn.addEventListener('click', ()=>{ try{ window.showContent && window.showContent('about') }catch(e){} })
+                  choices.appendChild(btn)
+                }
+              }
+            }catch(e){}
+          }
+        }
+      }catch(e){}
     }catch(e){}
   }
 

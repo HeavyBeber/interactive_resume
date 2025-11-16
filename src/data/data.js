@@ -2,7 +2,7 @@ export const state = {
   name: 'Alexandre Bernard',
   photo: 'assets/moi.png',
   balance: 0,
-  clickPower: 1
+  clickPower: 1000
 }
 
 export const data = {
@@ -90,6 +90,34 @@ export const data = {
     email: 'alexandre.bernard94@gmail.com',
     linkedin: 'https://www.linkedin.com/in/alexandre-bernard-89561ab7',
     phone: '(+33)6 75 59 51 20'
+  },
+  about: {
+    headline: 'About Me',
+    body: `I build reliable, user-focused products by blending technical depth with product thinking. I enjoy turning ambiguous problems into measurable outcomes, coordinating cross-functional teams, and shipping software that moves the needle. I'm particularly interested in data-driven product improvements and scalable backend systems.`
+  },
+  /* Profiles allow per-job/company overrides. Each profile can override `about`, `skills`, `projects`, etc. */
+  profiles: {
+    default: {
+      id: 'default',
+      name: 'Default',
+      about: "Well yeah, it's me"
+    },
+    acme_backend: {
+      "id": "acme_backend",
+      "name": "Acme — Backend Engineer",
+      "about": {
+        "headline": "About — Backend Engineer (Acme)",
+        "body": "I design and build resilient backend systems that scale gracefully under load. My work focuses on clear APIs, observability, and efficient data pipelines so teams can iterate quickly without sacrificing reliability.\n\nAt Acme I would prioritize pragmatic system design: well-defined interfaces, service contracts, and performance budgets. I instrument systems early and use metrics-driven triage to reduce latency and error rates while making mean-time-to-recovery measurable.\n\nI bring experience in designing ingestion and processing pipelines that turn noisy input into dependable signals for product decisions. This includes schema design, streaming and batch workflows, and cost-conscious storage patterns.\n\nI collaborate closely with product and SRE teams to align operational goals with feature development. That means automated testing, deployment safety (canaries/feature flags), and clear runbooks so services remain predictable in production.\n\nFinally, I mentor engineers to write maintainable, observable code and to prioritize technical debt reduction. My goal is to deliver measurable improvements in reliability, latency, and development velocity."
+      }
+    },
+    beta_product: {
+      id: 'beta_product',
+      name: 'Beta — Product Manager',
+      about: {
+        headline: 'About — Product Manager (Beta Ltd.)',
+        body: 'I combine technical understanding with product strategy to ship user-centred features. My approach uses experiments, analytics, and cross-functional collaboration to increase engagement and retention.'
+      }
+    }
   },
   shop: [
     { id: 'click_booster', name: 'Click Booster', cost: 10, desc: 'Permanently increases $ per click', repeatable: true },

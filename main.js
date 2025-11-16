@@ -1,5 +1,5 @@
 import { state, data } from './src/data/data.js'
-import { renderSkills, renderExperience, renderProjects, renderEducation, renderContact } from './src/ui/ui.js'
+import { renderSkills, renderExperience, renderProjects, renderEducation, renderContact, renderAbout } from './src/ui/ui.js'
 import { initShop } from './src/shop/shop.js'
 import { initAchievements } from './src/achievements/achievements.js'
 
@@ -28,6 +28,34 @@ const elements = {
   contentInner: document.getElementById('contentInner'),
   skillsPanelInner: document.getElementById('skillsPanelInner'),
   skillsToggle: document.getElementById('skillsToggle')
+}
+
+// Active profile id (read from ?profile=...)
+function readProfileFromQuery(){
+  try{
+    const params = new URLSearchParams(window.location.search)
+    return params.get('profile') || 'default'
+  }catch(e){ return 'default' }
+}
+
+let activeProfileId = readProfileFromQuery()
+
+function getActiveProfile(){
+  try{
+    if(data && data.profiles && data.profiles[activeProfileId]) return data.profiles[activeProfileId]
+    if(data && data.profiles && data.profiles.default) return data.profiles.default
+  }catch(e){}
+  return null
+}
+
+function getActiveAbout(){
+  try{
+    const base = (data && data.about) ? data.about : null
+    const prof = getActiveProfile()
+    if(!prof) return base
+    if(prof.about) return Object.assign({}, base || {}, prof.about)
+    return base
+  }catch(e){ return data.about }
 }
 
 // current averaged rate ($/s) over last 5s
@@ -285,6 +313,7 @@ function showContent(id){
   if(id === 'experience') renderExperience(elements.contentInner, data.experience)
   else if(id === 'education') renderEducation(elements.contentInner, data.education)
   else if(id === 'contact') renderContact(elements.contentInner, data.contact)
+  else if(id === 'about') renderAbout(elements.contentInner, getActiveAbout())
   if(elements.content){ elements.content.classList.remove('hidden'); elements.content.classList.add('fade-in') }
 }
 

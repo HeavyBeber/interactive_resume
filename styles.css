@@ -754,56 +754,71 @@ button:focus, a:focus, .exp-card:focus {
 }
 
 
-/* Balance counter: positioned inside the hero (top-right) */
+/* Balance counter: positioned inside the hero (top-right) - multiline layout */
 .hero .balance-counter {
   position: absolute;
-  right: 1.25rem;
-  top: 1.25rem;
+  right: 1rem;
+  top: 1rem;
   z-index: 120;
-  padding: 0.2rem;
-  border-radius: 10px;
-  background: transparent;
-  color: #ffffff;
+  padding: 0.45rem 0.7rem;
+  border-radius: 12px;
+  /* lighter than the hero but still subtly translucent */
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  color: #ffd27a; /* default text color leans goldish */
   font-weight: 700;
-  border: none;
-  box-shadow: none;
-  backdrop-filter: none;
+  border: 1px solid rgba(255,210,122,0.10);
+  box-shadow: 0 8px 24px rgba(2,6,23,0.45);
+  backdrop-filter: blur(6px) saturate(1.02);
   cursor: default;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  align-items: flex-end;
-  font-size: clamp(0.7rem, 1vw, 1rem);
+  display: inline-flex;
+  flex-direction: column; /* multiline: main on top, rate below */
+  gap: 0.18rem;
+  align-items: flex-end; /* right-align contents */
+  text-align: right;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  min-width: 110px;
+  max-width: 240px;
 }
 
 .hero .balance-counter:focus {
-  outline: 3px solid rgba(139, 92, 246, 0.14);
-  outline-offset: 4px;
+  outline: 3px solid rgba(139, 92, 246, 0.16);
+  outline-offset: 6px;
 }
 
 .balance-main {
-  font-weight: 800;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 0.18rem 0.45rem;
-  border-radius: 8px;
+  display: block;
+  font-weight: 900;
+  color: #ffd27a; /* goldish main amount */
   background: transparent;
-  display: inline-block;
-  font-size: clamp(0.8rem, 1.2vw, 1.2rem);
-  /* scales with viewport */
+  padding: 0.02rem 0.25rem;
+  border-radius: 6px;
+  font-size: clamp(1rem, 1.7vw, 1.12rem);
+  line-height: 1;
+}
+
+.balance-main::before{
+  content: '💰';
+  display:inline-block;
+  margin-right: 0.45rem;
+  transform: translateY(-2px);
 }
 
 .balance-rate {
-  font-size: clamp(0.6rem, 1vw, 0.9rem);
-  /* scales with viewport */
-  color: var(--muted);
-  margin-top: 0.2rem;
-  text-align: right;
-  display: block;
-  width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  padding: 0.12rem 0.4rem;
+  font-size: 0.72rem; /* smaller, less prominent */
+  color: rgba(255,210,122,0.78); /* muted gold tone */
+  margin: 0;
+  padding: 0.04rem 0.28rem;
+  background: transparent; /* keep subtle */
   border-radius: 6px;
-  background: transparent;
+  border: none;
+  opacity: 0.7; /* de-emphasize the rate (e.g., '/s') */
+  white-space: nowrap;
+}
+
+@media (max-width: 520px){
+  .hero .balance-counter{ right: 12px; top: 12px; padding: 0.3rem 0.45rem; min-width: 96px }
+  .balance-main::before{ content: '$'; font-weight:800; margin-right:0.35rem }
+  .balance-rate{ font-size:0.75rem }
 }
 
 /* Achievements panel + toast: centered, larger, persistent */

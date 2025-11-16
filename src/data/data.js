@@ -2,7 +2,7 @@ export const state = {
   name: 'Alexandre Bernard',
   photo: 'assets/moi.png',
   balance: 0,
-  clickPower: 1000
+  clickPower: 1
 }
 
 export const data = {

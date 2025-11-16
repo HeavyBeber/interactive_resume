@@ -57,7 +57,9 @@ try{
         state._photoClicks = (state._photoClicks || 0) + 1
         // visual feedback is handled by the global click handler (avoid spawning a zero-value toast here)
         if(state._photoClicks >= 10){
-          try{ achievementsApi?.unlockAchievement?.('click_face_10') }catch(e){}
+          try{
+            if(achievementsApi && typeof achievementsApi.unlockAchievement === 'function') achievementsApi.unlockAchievement('click_face_10')
+          }catch(e){}
         }
       }catch(e){}
     })
@@ -122,7 +124,7 @@ function updateScore(){
     }
   }catch(err){}
   // evaluate achievements after any balance change
-  try{ if(typeof achievementsApi?.checkAchievements === 'function') achievementsApi.checkAchievements(currentRate) }catch(e){}
+  try{ if(achievementsApi && typeof achievementsApi.checkAchievements === 'function') achievementsApi.checkAchievements(currentRate) }catch(e){}
 }
 
 // increment score on clicks
@@ -156,8 +158,17 @@ const creditedOnPointer = new WeakSet()
 // Give money when user presses (pointerdown) on a disabled section button
 document.addEventListener('pointerdown', (e)=>{
   try{
-    const btn = e.target && e.target.closest ? e.target.closest('.answerBtn') : null
-    if(btn && btn.hasAttribute('disabled')){
+    // Try to find a disabled .answerBtn target. Some browsers (Firefox) don't dispatch
+    // pointer events for disabled form controls in the usual way, so fall back to
+    // hit-testing at the pointer coordinates if needed.
+    let btn = e.target && e.target.closest ? e.target.closest('.answerBtn') : null
+    if(!btn && typeof e.clientX === 'number' && typeof e.clientY === 'number'){
+      try{
+        const hit = document.elementFromPoint(e.clientX, e.clientY)
+        btn = hit && hit.closest ? hit.closest('.answerBtn') : null
+      }catch(_){ btn = null }
+    }
+    if(btn && btn.hasAttribute && btn.hasAttribute('disabled')){
       const power = Number(state.clickPower || 1)
       state.balance += power
       if(typeof recordEvent === 'function') recordEvent(power)
@@ -229,7 +240,7 @@ const shopApi = initShop({
   shopBody: elements.shopBody,
   shopClose: elements.shopClose,
   shopBalance: elements.shopBalance
-}, state, data, updateScore, recordEvent, (id)=>{ try{ return achievementsApi?.unlockAchievement?.(id) }catch(e){} })
+}, state, data, updateScore, recordEvent, (id)=>{ try{ if(achievementsApi && typeof achievementsApi.unlockAchievement === 'function') return achievementsApi.unlockAchievement(id) }catch(e){} })
 // expose for other modules (achievements) to refresh shop when new items are added
 window.shopApi = shopApi
 

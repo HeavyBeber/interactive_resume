@@ -192,9 +192,9 @@ export function initAchievements(elements = {}, state, data, updateScore, record
       row.appendChild(bar)
       row.appendChild(overlay)
       pc.appendChild(row)
-      // If player has unlocked at least 80% of achievements, reveal the About section (one-time)
+      // If player has unlocked at least 50% of achievements, reveal the About section (one-time)
       try{
-        if(pct >= 80){
+        if(pct >= 50){
           // only reveal once
           if(!data._aboutRevealed){
             data._aboutRevealed = true
@@ -285,6 +285,14 @@ export function initAchievements(elements = {}, state, data, updateScore, record
               animateUnlocked(id); // Call animateUnlocked after rendering achievements
             } 
           }catch(e){}
+      // After handling the unlock side-effects, if the player has now reached 100% progress,
+      // refresh the About section so the full About becomes visible immediately.
+      try{
+        const prog = computeProgress()
+        if(prog && prog.pct === 100){
+          try{ if(window && typeof window.showContent === 'function') window.showContent('about') }catch(e){}
+        }
+      }catch(e){}
     }catch(e){}
   }
 

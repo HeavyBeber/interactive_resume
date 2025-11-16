@@ -179,6 +179,136 @@ export function renderAbout(container, about){
   title.textContent = (about && about.headline) ? about.headline : 'About Me'
   wrap.appendChild(title)
 
+  // compute achievement completion percentage
+  const ach = (data && Array.isArray(data.achievements)) ? data.achievements : []
+  const unlocked = ach.filter(a => a && a.unlocked).length
+  const total = ach.length || 1
+  const pct = Math.round((unlocked / total) * 100)
+
+  // Show a short preview: the first paragraph of the About text above the Wordle gate
+  try{
+    const fullText = (about && about.body) ? String(about.body) : ''
+    const first = fullText.split(/\n\s*\n/)[0] || ''
+    if(first && first.trim()){
+      const preview = document.createElement('p')
+      preview.className = 'muted about-body about-preview'
+      preview.textContent = first.trim()
+      wrap.appendChild(preview)
+    }
+  }catch(e){}
+
+  // If user hasn't reached 100% achievements and hasn't unlocked About via Wordle, show a Wordle challenge box
+  if(pct < 100 && !data._aboutUnlockedByWordle){
+    const box = document.createElement('div')
+    box.className = 'wordle-box'
+    const instruct = document.createElement('p')
+    instruct.className = 'muted'
+    instruct.textContent = 'Access the full About Me by completing all achievements or solving a 5-letter Wordle puzzle (6 attempts).'
+    box.appendChild(instruct)
+
+    // simple mini-wordle board
+    const board = document.createElement('div')
+    board.className = 'wordle-board'
+
+    const status = document.createElement('div')
+    status.className = 'wordle-status muted'
+    status.textContent = `Attempts left: 6`
+    box.appendChild(status)
+
+    const form = document.createElement('form')
+    form.className = 'wordle-form'
+    form.setAttribute('autocomplete','off')
+    const input = document.createElement('input')
+    input.type = 'text'
+    input.maxLength = 5
+    input.placeholder = 'Enter 5-letter word'
+    input.className = 'wordle-input'
+    input.setAttribute('aria-label','Wordle guess')
+    const btn = document.createElement('button')
+    btn.type = 'submit'
+    btn.className = 'primary'
+    btn.textContent = 'Guess'
+    form.appendChild(input)
+    form.appendChild(btn)
+    box.appendChild(board)
+    box.appendChild(form)
+
+    // secret selection (small list) — uppercase
+    const secrets = ['BRAIN','STACK','CODES','SERVER','TRACE']
+    const secret = secrets[Math.floor(Math.random() * secrets.length)]
+    let attempts = []
+    const maxAttempts = 6
+
+    function renderRow(guess){
+      const row = document.createElement('div')
+      row.className = 'wordle-row'
+      const target = secret
+      const freq = {}
+      // compute frequency of letters in target for yellow logic
+      for(const ch of target){ freq[ch] = (freq[ch] || 0) + 1 }
+
+      // first pass for greens
+      const cells = []
+      for(let i=0;i<5;i++){
+        const ch = guess[i] || ' '
+        const cell = document.createElement('span')
+        cell.className = 'wordle-cell'
+        cell.textContent = ch
+        if(ch === target[i]){ cell.classList.add('green'); freq[ch] = freq[ch] - 1 }
+        cells.push({cell,ch})
+      }
+      // second pass for yellows
+      cells.forEach(({cell,ch})=>{
+        if(cell.classList.contains('green')) return
+        if(ch && freq[ch] > 0){ cell.classList.add('yellow'); freq[ch] = freq[ch] - 1 }
+        else cell.classList.add('gray')
+      })
+      cells.forEach(c=>row.appendChild(c.cell))
+      board.appendChild(row)
+    }
+
+    function updateStatus(){
+      const left = Math.max(0, maxAttempts - attempts.length)
+      status.textContent = `Progress: ${pct}% — Attempts left: ${left}`
+    }
+
+    form.addEventListener('submit', (ev)=>{
+      ev.preventDefault()
+      const val = (input.value || '').toUpperCase().trim()
+      if(!/^[A-Z]{5}$/.test(val)){
+        input.focus(); return
+      }
+      if(attempts.length >= maxAttempts) return
+      attempts.push(val)
+      renderRow(val)
+      input.value = ''
+      updateStatus()
+      // check win
+      if(val === secret){
+        const done = document.createElement('p')
+        done.className = 'muted'
+        done.textContent = 'Nice! You solved it — full About unlocked.'
+        box.appendChild(done)
+        form.remove()
+        // mark temporary unlock so About renders fully and immediately
+        try{ data._aboutUnlockedByWordle = true }catch(e){}
+        try{ if(window && typeof window.showContent === 'function') window.showContent('about') }catch(e){}
+        // Note: solving the Wordle intentionally does NOT unlock any hidden/easter achievements.
+      } else if(attempts.length >= maxAttempts){
+        const done = document.createElement('p')
+        done.className = 'muted'
+        done.textContent = `Out of attempts — the word was ${secret}. Try exploring other sections and come back.`
+        box.appendChild(done)
+        form.remove()
+      }
+    })
+
+    wrap.appendChild(box)
+    container.appendChild(wrap)
+    return
+  }
+
+  // If 100% achieved, render the full about paragraphs as before
   const bodyText = (about && about.body) ? String(about.body) : ''
   if(!bodyText.trim()){
     const p = document.createElement('p')
@@ -186,7 +316,6 @@ export function renderAbout(container, about){
     p.textContent = 'No about information provided.'
     wrap.appendChild(p)
   } else {
-    // split on empty-line separators to render paragraphs
     const paragraphs = bodyText.split(/\n\s*\n/)
     paragraphs.forEach(par => {
       const p = document.createElement('p')

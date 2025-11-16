@@ -600,6 +600,66 @@ pre {
   margin-top: 0.6rem;
 }
 
+/* Mini-Wordle widget used to gate About content when achievements < 100% */
+.wordle-box {
+  margin-top: 0.6rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,210,122,0.10);
+  position: relative;
+  box-shadow: 0 12px 40px rgba(255,210,122,0.06), 0 6px 20px rgba(2,6,23,0.55);
+  transition: transform .12s ease, box-shadow .18s ease, border-color .12s ease;
+}
+.wordle-box::before{
+  content: '🔒 Locked';
+  position: absolute;
+  left: 12px;
+  top: -10px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, #ffd9b3, #ffd27a);
+  color: #021224;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 800;
+  box-shadow: 0 8px 24px rgba(255,210,122,0.12);
+  font-size: 0.85rem;
+}
+.wordle-box:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 20px 80px rgba(255,210,122,0.14), 0 10px 32px rgba(2,6,23,0.6);
+  border-color: rgba(255,210,122,0.22);
+}
+.wordle-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.6rem 0;
+}
+.wordle-row {
+  display: inline-flex;
+  gap: 0.45rem;
+}
+.wordle-cell {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  color: #e9f0ff;
+  font-weight: 900;
+  letter-spacing: 0.04rem;
+  font-size: 0.95rem;
+}
+.wordle-cell.green { background: #16a34a; color: white }
+.wordle-cell.yellow { background: #f59e0b; color: #021224 }
+.wordle-cell.gray { background: rgba(255,255,255,0.04); color: #9aa6b8 }
+.wordle-form { display: flex; gap: 0.6rem; align-items: center }
+.wordle-input { padding: 0.6rem 0.75rem; border-radius: 10px; border: 1px solid rgba(255,210,122,0.12); background: rgba(255,255,255,0.02); color: #e9f0ff; width: 190px; font-weight:700 }
+.wordle-status { font-size: 0.98rem; margin: 0; font-weight:700 }
+
 /* Lottie layout */
 .hero-lottie {
   margin-top: 0.6rem

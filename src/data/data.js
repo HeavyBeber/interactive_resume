@@ -2,7 +2,7 @@ export const state = {
   name: 'Alexandre Bernard',
   photo: 'assets/moi.png',
   balance: 0,
-  clickPower: 1000
+  clickPower: 1
 }
 
 export const data = {
@@ -100,7 +100,10 @@ export const data = {
     default: {
       id: 'default',
       name: 'Default',
-      about: "Well yeah, it's me"
+      "about": {
+        "headline": "About — Backend Engineer (Acme)",
+        "body": "I design and build resilient backend systems that scale gracefully under load. My work focuses on clear APIs, observability, and efficient data pipelines so teams can iterate quickly without sacrificing reliability.\n\nAt Acme I would prioritize pragmatic system design: well-defined interfaces, service contracts, and performance budgets. I instrument systems early and use metrics-driven triage to reduce latency and error rates while making mean-time-to-recovery measurable.\n\nI bring experience in designing ingestion and processing pipelines that turn noisy input into dependable signals for product decisions. This includes schema design, streaming and batch workflows, and cost-conscious storage patterns.\n\nI collaborate closely with product and SRE teams to align operational goals with feature development. That means automated testing, deployment safety (canaries/feature flags), and clear runbooks so services remain predictable in production.\n\nFinally, I mentor engineers to write maintainable, observable code and to prioritize technical debt reduction. My goal is to deliver measurable improvements in reliability, latency, and development velocity."
+      }
     },
     acme_backend: {
       "id": "acme_backend",

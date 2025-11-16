@@ -234,7 +234,7 @@ export function renderAbout(container, about){
     box.appendChild(form)
 
     // secret selection (small list) — uppercase
-    const secrets = ['BRAIN','STACK','CODES','SERVER','TRACE']
+    const secrets = ['SKILL','TRUST','SMART','SOLVE','LEARN','VALUE']
     const secret = secrets[Math.floor(Math.random() * secrets.length)]
     let attempts = []
     const maxAttempts = 6

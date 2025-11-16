@@ -55,8 +55,7 @@ try{
     elements.photoEl.addEventListener('click', (e)=>{
       try{
         state._photoClicks = (state._photoClicks || 0) + 1
-        // small visual feedback: spawn floating text near photo
-        try{ spawnFloating(0, e.clientX, e.clientY) }catch(_){ }
+        // visual feedback is handled by the global click handler (avoid spawning a zero-value toast here)
         if(state._photoClicks >= 10){
           try{ achievementsApi?.unlockAchievement?.('click_face_10') }catch(e){}
         }

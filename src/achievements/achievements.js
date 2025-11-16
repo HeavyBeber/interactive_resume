@@ -264,7 +264,7 @@ export function initAchievements(elements = {}, state, data, updateScore, record
       const first = achs.find(a=>a.id==='first_earned')
       if(first && !first.unlocked){ if(state.balance > 0) unlockAchievement('first_earned') }
       const second = achs.find(a=>a.id==='idle_or_resume')
-      if(second && !second.unlocked){ if(state.balance >= 10) unlockAchievement('idle_or_resume') }
+      if(second && !second.unlocked){ if(state.balance >= 5) unlockAchievement('idle_or_resume') }
       const rateAch = achs.find(a=>a.id==='rate_50')
       try{ const r = Number(currentRate || 0); if(rateAch && !rateAch.unlocked && r >= 50){ unlockAchievement('rate_50') } }catch(e){}
     }catch(e){}

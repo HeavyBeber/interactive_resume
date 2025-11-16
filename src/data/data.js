@@ -93,7 +93,7 @@ export const data = {
   },
   shop: [
     { id: 'click_booster', name: 'Click Booster', cost: 10, desc: 'Permanently increases $ per click', repeatable: true },
-    { id: 'auto_clicker', name: 'Auto Clicker', cost: 30, desc: 'Performs 1 click every second.', repeatable: true },
+    { id: 'auto_clicker', name: 'Auto Clicker', cost: 50, desc: 'Performs 1 click every second.', repeatable: true },
     { id: 'video_demo', name: 'Add break', cost: 1000, desc: 'Watch my demo reel', repeatable: false, videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', awardAchievement: 'dont_give_up_on_me' }
   ],
   achievements: [

@@ -105,20 +105,12 @@ export const data = {
         "body": "I design and build resilient backend systems that scale gracefully under load. My work focuses on clear APIs, observability, and efficient data pipelines so teams can iterate quickly without sacrificing reliability.\n\nAt Acme I would prioritize pragmatic system design: well-defined interfaces, service contracts, and performance budgets. I instrument systems early and use metrics-driven triage to reduce latency and error rates while making mean-time-to-recovery measurable.\n\nI bring experience in designing ingestion and processing pipelines that turn noisy input into dependable signals for product decisions. This includes schema design, streaming and batch workflows, and cost-conscious storage patterns.\n\nI collaborate closely with product and SRE teams to align operational goals with feature development. That means automated testing, deployment safety (canaries/feature flags), and clear runbooks so services remain predictable in production.\n\nFinally, I mentor engineers to write maintainable, observable code and to prioritize technical debt reduction. My goal is to deliver measurable improvements in reliability, latency, and development velocity."
       }
     },
-    acme_backend: {
-      "id": "acme_backend",
-      "name": "Acme — Backend Engineer",
+    alan: {
+      "id": "alan",
+      "name": "alan",
       "about": {
-        "headline": "About — Backend Engineer (Acme)",
-        "body": "I design and build resilient backend systems that scale gracefully under load. My work focuses on clear APIs, observability, and efficient data pipelines so teams can iterate quickly without sacrificing reliability.\n\nAt Acme I would prioritize pragmatic system design: well-defined interfaces, service contracts, and performance budgets. I instrument systems early and use metrics-driven triage to reduce latency and error rates while making mean-time-to-recovery measurable.\n\nI bring experience in designing ingestion and processing pipelines that turn noisy input into dependable signals for product decisions. This includes schema design, streaming and batch workflows, and cost-conscious storage patterns.\n\nI collaborate closely with product and SRE teams to align operational goals with feature development. That means automated testing, deployment safety (canaries/feature flags), and clear runbooks so services remain predictable in production.\n\nFinally, I mentor engineers to write maintainable, observable code and to prioritize technical debt reduction. My goal is to deliver measurable improvements in reliability, latency, and development velocity."
-      }
-    },
-    beta_product: {
-      id: 'beta_product',
-      name: 'Beta — Product Manager',
-      about: {
-        headline: 'About — Product Manager (Beta Ltd.)',
-        body: 'I combine technical understanding with product strategy to ship user-centred features. My approach uses experiments, analytics, and cross-functional collaboration to increase engagement and retention.'
+        "headline": "Me and Alan",
+        "body": "I’m a Product Owner with two years of experience bringing ideas to life, shaping products through user insights, and collaborating across teams to solve real problems. But beyond my job title, I’m also a dad of two — and that’s a big part of why I care so much about the work I do and the companies I choose to join.\n\nBeing a father changed the way I think about health, time, and simplicity. When you’re caring for two little humans, you quickly realise how precious every minute is — and how important it is to have systems and services that genuinely help you navigate life, instead of adding more stress. That’s why Alan’s mission speaks to me so strongly.\n\nI actually used Alan for a full year, and it wasn’t just “good insurance.” It felt like someone had finally designed healthcare the way it should be — clear, caring, and built around real people’s needs. That personal experience made me understand, in a very tangible way, how powerful member-centric design can be. It also made me genuinely excited about the idea of helping build the next chapter of that experience for other families, freelancers, and small businesses.\n\nProfessionally, I’m naturally curious, analytical, and obsessed with understanding users. I’m comfortable diving into data, refining priorities, and bringing teams around a shared outcome. But what really drives me is making things that improve people’s daily lives — especially when it comes to health and wellbeing.\n\nAs a parent, as a user, and as someone who loves building simple, thoughtful solutions, I feel a strong alignment with Alan’s culture and values. I’m excited by the Segment Owner role because it blends strategy, empathy, creativity, and ownership — everything that motivates me and brings out the best in my work."
       }
     }
   },

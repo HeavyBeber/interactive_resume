@@ -185,20 +185,22 @@ export function renderAbout(container, about){
   const total = ach.length || 1
   const pct = Math.round((unlocked / total) * 100)
 
-  // Show a short preview: the first paragraph of the About text above the Wordle gate
-  try{
-    const fullText = (about && about.body) ? String(about.body) : ''
-    const first = fullText.split(/\n\s*\n/)[0] || ''
-    if(first && first.trim()){
-      const preview = document.createElement('p')
-      preview.className = 'muted about-body about-preview'
-      preview.textContent = first.trim()
-      wrap.appendChild(preview)
-    }
-  }catch(e){}
+  // (preview inserted later only when About is gated)
 
   // If user hasn't reached 100% achievements and hasn't unlocked About via Wordle, show a Wordle challenge box
   if(pct < 100 && !data._aboutUnlockedByWordle){
+    // show first-paragraph preview above the gate
+    try{
+      const fullText = (about && about.body) ? String(about.body) : ''
+      const first = fullText.split(/\n\s*\n/)[0] || ''
+      if(first && first.trim()){
+        const preview = document.createElement('p')
+        preview.className = 'muted about-body about-preview'
+        preview.textContent = first.trim()
+        wrap.appendChild(preview)
+      }
+    }catch(e){}
+
     const box = document.createElement('div')
     box.className = 'wordle-box'
     const instruct = document.createElement('p')
@@ -215,29 +217,14 @@ export function renderAbout(container, about){
     status.textContent = `Attempts left: 6`
     box.appendChild(status)
 
-    const form = document.createElement('form')
-    form.className = 'wordle-form'
-    form.setAttribute('autocomplete','off')
-    const input = document.createElement('input')
-    input.type = 'text'
-    input.maxLength = 5
-    input.placeholder = 'Enter 5-letter word'
-    input.className = 'wordle-input'
-    input.setAttribute('aria-label','Wordle guess')
-    const btn = document.createElement('button')
-    btn.type = 'submit'
-    btn.className = 'primary'
-    btn.textContent = 'Guess'
-    form.appendChild(input)
-    form.appendChild(btn)
     box.appendChild(board)
-    box.appendChild(form)
 
     // secret selection (small list) — uppercase
     const secrets = ['SKILL','TRUST','SMART','SOLVE','LEARN','VALUE']
-    const secret = secrets[Math.floor(Math.random() * secrets.length)]
+    let secret = secrets[Math.floor(Math.random() * secrets.length)]
     let attempts = []
     const maxAttempts = 6
+    let currentForm = null
 
     function renderRow(guess){
       const row = document.createElement('div')
@@ -269,39 +256,81 @@ export function renderAbout(container, about){
 
     function updateStatus(){
       const left = Math.max(0, maxAttempts - attempts.length)
-      status.textContent = `Progress: ${pct}% — Attempts left: ${left}`
+      status.textContent = `Attempts left: ${left}`
     }
 
-    form.addEventListener('submit', (ev)=>{
-      ev.preventDefault()
-      const val = (input.value || '').toUpperCase().trim()
-      if(!/^[A-Z]{5}$/.test(val)){
-        input.focus(); return
-      }
-      if(attempts.length >= maxAttempts) return
-      attempts.push(val)
-      renderRow(val)
-      input.value = ''
-      updateStatus()
-      // check win
-      if(val === secret){
-        const done = document.createElement('p')
-        done.className = 'muted'
-        done.textContent = 'Nice! You solved it — full About unlocked.'
-        box.appendChild(done)
-        form.remove()
-        // mark temporary unlock so About renders fully and immediately
-        try{ data._aboutUnlockedByWordle = true }catch(e){}
-        try{ if(window && typeof window.showContent === 'function') window.showContent('about') }catch(e){}
-        // Note: solving the Wordle intentionally does NOT unlock any hidden/easter achievements.
-      } else if(attempts.length >= maxAttempts){
-        const done = document.createElement('p')
-        done.className = 'muted'
-        done.textContent = `Out of attempts — the word was ${secret}. Try exploring other sections and come back.`
-        box.appendChild(done)
-        form.remove()
-      }
-    })
+    function createForm(){
+      // remove existing form if present
+      if(currentForm && currentForm.parentNode) currentForm.remove()
+      const form = document.createElement('form')
+      form.className = 'wordle-form'
+      form.setAttribute('autocomplete','off')
+      const input = document.createElement('input')
+      input.type = 'text'
+      input.maxLength = 5
+      input.placeholder = 'Enter 5-letter word'
+      input.className = 'wordle-input'
+      input.setAttribute('aria-label','Wordle guess')
+      const btn = document.createElement('button')
+      btn.type = 'submit'
+      btn.className = 'primary'
+      btn.textContent = 'Guess'
+      form.appendChild(input)
+      form.appendChild(btn)
+      box.appendChild(form)
+      currentForm = form
+
+      form.addEventListener('submit', (ev)=>{
+        ev.preventDefault()
+        const val = (input.value || '').toUpperCase().trim()
+        if(!/^[A-Z]{5}$/.test(val)){
+          input.focus(); return
+        }
+        if(attempts.length >= maxAttempts) return
+        attempts.push(val)
+        renderRow(val)
+        input.value = ''
+        updateStatus()
+        // check win
+        if(val === secret){
+          const done = document.createElement('p')
+          done.className = 'muted'
+          done.textContent = 'Nice! You solved it — full About unlocked.'
+          box.appendChild(done)
+          try{ if(currentForm && currentForm.parentNode) currentForm.remove() }catch(e){}
+          // mark temporary unlock so About renders fully and immediately
+          try{ data._aboutUnlockedByWordle = true }catch(e){}
+          try{ if(window && typeof window.showContent === 'function') window.showContent('about') }catch(e){}
+          // Note: solving the Wordle intentionally does NOT unlock any hidden/easter achievements.
+        } else if(attempts.length >= maxAttempts){
+          const done = document.createElement('p')
+          done.className = 'muted'
+          done.textContent = `Out of attempts — the word was ${secret}.`
+          box.appendChild(done)
+          try{ if(currentForm && currentForm.parentNode) currentForm.remove() }catch(e){}
+          // add a retry button
+          const retry = document.createElement('button')
+          retry.type = 'button'
+          retry.className = 'primary'
+          retry.textContent = 'Retry'
+          retry.addEventListener('click', ()=>{
+            // clear board, reset attempts and pick a new secret, remove messages, recreate form
+            try{ board.innerHTML = ''; }catch(e){}
+            attempts = []
+            secret = secrets[Math.floor(Math.random() * secrets.length)]
+            try{ done.remove() }catch(e){}
+            try{ retry.remove() }catch(e){}
+            updateStatus()
+            createForm()
+            try{ const newInput = currentForm && currentForm.querySelector('.wordle-input'); if(newInput) newInput.focus() }catch(e){}
+          })
+          box.appendChild(retry)
+        }
+      })
+    }
+
+    // initial form
+    createForm()
 
     wrap.appendChild(box)
     container.appendChild(wrap)

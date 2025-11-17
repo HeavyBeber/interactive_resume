@@ -1208,10 +1208,10 @@ button:focus, a:focus, .exp-card:focus {
 
 /* Shop button */
 .shop-button {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 120;
+  position: fixed !important;
+  right: 18px !important;
+  bottom: 18px !important;
+  z-index: 99999 !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1243,14 +1243,21 @@ button:focus, a:focus, .exp-card:focus {
   outline-offset: 6px
 }
 
+/* Ensure fixed buttons remain fixed to the viewport on Safari even when ancestors have transforms/filters */
+.shop-button, .achievements-button {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
 /* Keep shop hidden when `.hidden` is present (more specific selector to override .shop-button display) */
 
 /* Achievements button (left of shop) */
 .achievements-button {
-  position: fixed;
-  right: 86px;
-  bottom: 18px;
-  z-index: 120;
+  position: fixed !important;
+  right: 86px !important;
+  bottom: 18px !important;
+  z-index: 99998 !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;

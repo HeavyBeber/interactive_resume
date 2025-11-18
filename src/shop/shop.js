@@ -100,12 +100,12 @@ export function initShop(elements = {}, state, data, updateScore, recordEvent, o
         state.clickPower = Number(state.clickPower) + 1
         // track count of click boosters purchased (stored on the shop item)
         item._count = (item._count || 0) + 1
-        // if player bought 5 boosters, notify via callback or mutate achievement
-        if(item._count >= 5){
+        // if player bought 3 boosters, notify via callback or mutate achievement
+        if(item._count >= 3){
           try{
-            if(typeof onUnlock === 'function') onUnlock('buy_5_boosters')
+            if(typeof onUnlock === 'function') onUnlock('buy_3_boosters')
             else {
-              const ach = (data.achievements || []).find(a=>a.id==='buy_5_boosters')
+              const ach = (data.achievements || []).find(a=>a.id==='buy_3_boosters')
               if(ach) ach.unlocked = true
             }
           }catch(e){}
